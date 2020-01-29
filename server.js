@@ -2,7 +2,6 @@ const express = require('express');
 const app = express();
 const db = require('./models');
 const mockData = require('./helpers/mockData');
-
 const { ApolloServer } = require('apollo-server-express');
 const typeDefs = require('./graphql/schema');
 const resolvers = require('./graphql/resolvers');
@@ -21,10 +20,16 @@ apolloServ.applyMiddleware({
 const PORT = process.env.PORT;
 
 app.get('/api/faker/users', (req, res) => {
-	mockData.createUsers().then(console.log);
-	res.status(200);
+	mockData.createUsers().then(users => {
+		res.json(users);
+	});
 });
 
+app.get('/api/users', (req, res) => {
+	db.User.findAll().then(users => {
+		res.json(users);
+	});
+});
 app.get('/api/faker/clients', (req, res) => {
 	mockData.createClients().then(clients => {
 		res.json(clients);

@@ -39,5 +39,6 @@ const LayoutStyled = styled.div`
 		display: flex;
 		height: 80vh;
 		width: 100%;
+		overflow-y: scroll;
 	}
 `;

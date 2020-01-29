@@ -4,16 +4,19 @@
 	"description": "",
 	"main": "server.js",
 	"scripts": {
-		"test": "echo \"Error: no test specified\" && exit 1",
+		"client-install": "cd client && yarn install",
 		"start": "node server.js",
-		"dev": "nodemon server.js"
+		"server": "nodemon server.js",
+		"client": "cd client/ && yarn start",
+		"dev": "concurrently \"yarn run server\" \"yarn run client\""
 	},
 	"keywords": [],
-	"author": "",
+	"author": "Alexander Santos Santana",
 	"license": "ISC",
 	"dependencies": {
 		"apollo-server-express": "^2.9.16",
 		"bcrypt": "^3.0.7",
+		"concurrently": "^5.1.0",
 		"dotenv": "^8.2.0",
 		"express": "^4.17.1",
 		"faker": "^4.1.0",
