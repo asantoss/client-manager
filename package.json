@@ -17,6 +17,8 @@
 		"apollo-server-express": "^2.9.16",
 		"bcrypt": "^3.0.7",
 		"concurrently": "^5.1.0",
+		"cookie-parser": "^1.4.4",
+		"cookieparser": "^0.1.0",
 		"dotenv": "^8.2.0",
 		"express": "^4.17.1",
 		"faker": "^4.1.0",
