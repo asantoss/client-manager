@@ -6,13 +6,13 @@ import Search from './components/Clients';
 function App() {
 	return (
 		<div className='App'>
-			<Layout>
-				<Router>
+			<Router>
+				<Layout>
 					<Route path='/clients' component={Search} />
 					<Route path='/signup' component={SignUp} />
 					<Route path='/signin' />
-				</Router>
-			</Layout>
+				</Layout>
+			</Router>
 		</div>
 	);
 }

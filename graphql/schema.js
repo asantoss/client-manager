@@ -20,9 +20,10 @@ const typeDefs = gql`
 		zipCode: String
 	}
 	type Query {
-		getAllUsers: [User!]
-		getUser(id: ID!): User
+		getUsers: [User!]
+		getMe(id: ID!): User
 		getClient(id: ID!): Client
+		login(email: String, password: String): User
 	}
 	type Mutation {
 		createUser(

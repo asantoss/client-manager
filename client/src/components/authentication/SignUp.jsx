@@ -1,7 +1,7 @@
 import React from 'react';
 import { useFormik, Field } from 'formik';
 import { TextField, InputLabel, Button } from '@material-ui/core';
-import styled from 'styled-components';
+import { css } from 'emotion';
 
 export default function SignUp() {
 	const formik = useFormik({
@@ -16,7 +16,20 @@ export default function SignUp() {
 		}
 	});
 	return (
-		<SignUpForm onSubmit={formik.handleSubmit}>
+		<form
+			className={css`
+				height: 500px;
+				width: 600px;
+				margin: auto;
+				display: flex;
+				flex-direction: column;
+				justify-content: space-evenly;
+				button {
+					align-self: flex-end;
+					width: 100px;
+				}
+			`}
+			onSubmit={formik.handleSubmit}>
 			<h1>Sign Up</h1>
 			<InputLabel />
 			<TextField
@@ -48,19 +61,6 @@ export default function SignUp() {
 			<Button variant='contained' color='primary' type='submit'>
 				Submit
 			</Button>
-		</SignUpForm>
+		</form>
 	);
 }
-
-const SignUpForm = styled.form`
-	height: 500px;
-	width: 600px;
-	margin: auto;
-	display: flex;
-	flex-direction: column;
-	justify-content: space-evenly;
-	button {
-		align-self: flex-end;
-		width: 100px;
-	}
-`;
