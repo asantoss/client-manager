@@ -24,10 +24,10 @@ const typeDefs = gql`
     getUsers: [User!]
     getMe: User
     getClient(id: ID!): Client
-    login(email: String, password: String): User
+    login(email: String!, password: String!): User
   }
   type Mutation {
-    createUser(
+    register(
       firstName: String
       lastName: String
       email: String

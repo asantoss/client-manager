@@ -41,11 +41,7 @@ const resolvers = {
     }
   },
   Mutation: {
-    createUser: async (
-      _,
-      { firstName, lastName, email, password },
-      { req }
-    ) => {
+    register: async (_, { firstName, lastName, email, password }, { req }) => {
       const hashedPassword = await bcrypt.hash(password, saltRounds);
       email = email.toLowerCase();
       return await models.User.create({
