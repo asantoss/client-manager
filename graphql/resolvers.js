@@ -1,11 +1,18 @@
 const models = require("../models");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
+const createTokens = require("../helpers/auth");
 const saltRounds = 10;
 const resolvers = {
   Query: {
-    getMe: async (_, args, { req }) => {
+    getUser: async (_, args, { req }) => {
       return await models.User.findByPk(args.id);
+    },
+    getMe: async (_, args, { req }) => {
+      if (!req.userId) {
+        return null;
+      }
+      return await models.User.findByPk(req.userId);
     },
     getClient: async (_, args, { req }) => {
       return await models.Client.findByPk(args.id);
@@ -20,30 +27,10 @@ const resolvers = {
         }
       });
       if (!user) return null;
-
       const valid = await bcrypt.compare(password, user.password);
       if (!valid) return null;
-      console.log(req.cookies);
       // *** Create the session JWT
-      const accessToken = jwt.sign(
-        {
-          userId: user.id
-        },
-        process.env.TOKEN_SECRET,
-        {
-          expiresIn: "15m"
-        }
-      );
-      const refreshToken = jwt.sign(
-        {
-          userId: user.id
-        },
-        process.env.TOKEN_SECRET,
-        {
-          expiresIn: "7d"
-        }
-      );
-
+      const { refreshToken, accessToken } = createTokens(user);
       res.cookie("access-token", accessToken, {
         maxAge: 1000 * 60 * 15
       });
