@@ -7,7 +7,7 @@ const resolvers = require("./graphql/resolvers");
 const db = require("./models");
 const jwt = require("jsonwebtoken");
 const createTokens = require("./helpers/auth");
-
+const cors = require("cors");
 const PORT = process.env.PORT;
 
 async function startServer() {
@@ -20,8 +20,13 @@ async function startServer() {
       res
     })
   });
-
   const app = express();
+  app.use(
+    cors({
+      origin: "*",
+      credentials: true
+    })
+  );
   app.use(cookieParser());
 
   app.use(async (req, res, next) => {

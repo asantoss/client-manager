@@ -9,6 +9,22 @@ export const LOGIN = gql`
     }
   }
 `;
+export const GET_CLIENTS = gql`
+  query getMe {
+    getMe {
+      id
+      firstName
+      lastName
+      clients {
+        id
+        firstName
+        lastName
+        email
+        phoneNumber
+      }
+    }
+  }
+`;
 
 export const REGISTER = gql`
   mutation register(

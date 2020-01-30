@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { NavLink, withRouter } from "react-router-dom";
+import { NavLink, withRouter, Link } from "react-router-dom";
 import { css } from "@emotion/core";
 import {
   AppBar,
@@ -15,13 +15,14 @@ import {
 } from "@material-ui/core";
 import { makeStyles, useTheme } from "@material-ui/core/styles";
 import { ArrowForward } from "@material-ui/icons";
+import { connect, useSelector, useDispatch } from "react-redux";
 
 const drawerWidth = 240;
 
 const useStyles = makeStyles(theme => ({
   root: {
     display: "flex",
-    marginBottom: "2em"
+    marginBottom: "5em"
   },
   drawer: {
     [theme.breakpoints.up("sm")]: {
@@ -52,6 +53,8 @@ const useStyles = makeStyles(theme => ({
 }));
 
 function Navbar(props) {
+  const { isLoggedIn } = useSelector(state => state.user);
+  const dispatch = useDispatch();
   const [isOpen, setOpen] = useState(false);
   const theme = useTheme();
   const classes = useStyles(theme);
@@ -69,6 +72,10 @@ function Navbar(props) {
     if (window && window.innerWidth < 600) {
       setOpen(!isOpen);
     }
+  };
+  const handleLogout = () => {
+    handleDrawerToggle();
+    dispatch({ type: "LOGOUT" });
   };
 
   const drawer = (
@@ -110,11 +117,19 @@ function Navbar(props) {
           </ListItem>
         </NavLink>
         <Divider />
-        <NavLink to="/login" activeClassName="current">
-          <ListItem onClick={handleDrawerToggle}>
-            <ListItemText primary="Login" />
-          </ListItem>
-        </NavLink>
+        {isLoggedIn ? (
+          <Link to="/login">
+            <ListItem onClick={handleLogout}>
+              <ListItemText primary="Log Out" />
+            </ListItem>
+          </Link>
+        ) : (
+          <NavLink to="/login" activeClassName="current">
+            <ListItem onClick={handleDrawerToggle}>
+              <ListItemText primary="Login" />
+            </ListItem>
+          </NavLink>
+        )}
       </List>
     </div>
   );

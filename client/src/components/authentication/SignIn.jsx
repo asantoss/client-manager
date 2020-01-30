@@ -13,11 +13,18 @@ import { css } from "emotion";
 import { useLazyQuery } from "@apollo/react-hooks";
 
 import { LOGIN } from "../../apollo/constants";
-import { Link } from "react-router-dom";
+import { Link, Redirect } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
 
 export default function SignIn() {
+  const { isLoggedIn } = useSelector(state => state.user);
+  const dispatch = useDispatch();
   const [isPasswordShown, setPassShowed] = useState(false);
-  const [handleLogin, { loading, data }] = useLazyQuery(LOGIN);
+  const [handleLogin, { loading, data }] = useLazyQuery(LOGIN, {
+    onCompleted: data => {
+      data.login && dispatch({ type: "LOGIN", payload: { ...data.login } });
+    }
+  });
   const formik = useFormik({
     initialValues: {
       password: "",
@@ -35,8 +42,9 @@ export default function SignIn() {
     event.preventDefault();
   };
   if (loading) return <p>Loading....</p>;
-  if (data) {
-    alert(JSON.stringify(data, null, 2));
+
+  if (data && data.login) {
+    return <Redirect to="/" />;
   }
   return (
     <form

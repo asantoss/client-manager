@@ -2,16 +2,19 @@ import React from "react";
 import Layout from "./components/Layouts/Layout";
 import { BrowserRouter as Router, Route } from "react-router-dom";
 import SignUp from "./components/authentication/SignUp";
-import Search from "./components/Clients";
+import Clients from "./components/Clients";
 import SignIn from "./components/authentication/SignIn";
 import { ApolloClient } from "apollo-client";
 import { InMemoryCache } from "apollo-cache-inmemory";
 import { HttpLink } from "apollo-link-http";
 import { ApolloProvider } from "@apollo/react-hooks";
+import { Provider } from "react-redux";
+import store from "./store";
 
 const cache = new InMemoryCache();
 const link = new HttpLink({
-  uri: "http://localhost:5000/graphql"
+  uri: "/graphql",
+  credentials: "same-origin"
 });
 
 const client = new ApolloClient({
@@ -35,14 +38,16 @@ function App() {
   return (
     <div className="App">
       <ApolloProvider client={client}>
-        <Router>
-          <Layout>
-            <Route path="/" exact />
-            <Route path="/clients" component={Search} />
-            <Route path="/register" component={SignUp} />
-            <Route path="/login" exact component={SignIn} />
-          </Layout>
-        </Router>
+        <Provider store={store}>
+          <Router>
+            <Layout>
+              <Route path="/" exact />
+              <Route path="/clients" component={Clients} />
+              <Route path="/register" component={SignUp} />
+              <Route path="/login" exact component={SignIn} />
+            </Layout>
+          </Router>
+        </Provider>
       </ApolloProvider>
     </div>
   );

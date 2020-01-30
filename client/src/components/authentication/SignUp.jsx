@@ -5,8 +5,7 @@ import {
   InputLabel,
   Button,
   InputAdornment,
-  IconButton,
-  OutlinedInput
+  IconButton
 } from "@material-ui/core";
 import { Visibility, VisibilityOff } from "@material-ui/icons";
 import * as Yup from "yup";
