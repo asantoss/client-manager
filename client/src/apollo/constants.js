@@ -21,6 +21,9 @@ export const GET_CLIENTS = gql`
         lastName
         email
         phoneNumber
+        address
+        city
+        zipCode
       }
     }
   }

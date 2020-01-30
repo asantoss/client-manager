@@ -17,7 +17,7 @@ import { makeStyles, useTheme } from "@material-ui/core/styles";
 import { ArrowForward } from "@material-ui/icons";
 import { connect, useSelector, useDispatch } from "react-redux";
 
-const drawerWidth = 240;
+const drawerWidth = 200;
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -44,6 +44,7 @@ const useStyles = makeStyles(theme => ({
   },
   toolbar: theme.mixins.toolbar,
   drawerPaper: {
+    overflowX: "hidden",
     width: drawerWidth
   },
   content: {
@@ -89,40 +90,41 @@ function Navbar(props) {
             color: #1976d2;
           }
         }
+        .logo {
+          display: flex;
+          align-items: center;
+          min-height: 56px;
+        }
       `}
     >
       <Divider />
       <List style={{ width: "240px" }}>
-        <NavLink to="/">
+        <NavLink to="/" className="logo">
           <ListItem onClick={handleDrawerToggle}>
             <Typography variant="h5">Client Manager</Typography>
           </ListItem>
         </NavLink>
         <Divider />
-        <NavLink to="/clients" activeClassName="current">
-          <ListItem onClick={handleDrawerToggle}>
-            <ListItemText primary="Clients" />
-          </ListItem>
-        </NavLink>
-        <Divider />
-        <NavLink to="/reviews" activeClassName="current">
-          <ListItem onClick={handleDrawerToggle}>
-            <ListItemText primary="Reviews" />
-          </ListItem>
-        </NavLink>
-        <Divider />
-        <NavLink to="/about" activeClassName="current">
-          <ListItem onClick={handleDrawerToggle}>
-            <ListItemText primary="About" />
-          </ListItem>
-        </NavLink>
-        <Divider />
         {isLoggedIn ? (
-          <Link to="/login">
-            <ListItem onClick={handleLogout}>
-              <ListItemText primary="Log Out" />
-            </ListItem>
-          </Link>
+          <>
+            <NavLink to="/clients" activeClassName="current">
+              <ListItem onClick={handleDrawerToggle}>
+                <ListItemText primary="Clients" />
+              </ListItem>
+            </NavLink>
+            <Divider />
+            <NavLink to="/reviews" activeClassName="current">
+              <ListItem onClick={handleDrawerToggle}>
+                <ListItemText primary="Reviews" />
+              </ListItem>
+            </NavLink>
+            <Divider />
+            <Link to="/login">
+              <ListItem onClick={handleLogout}>
+                <ListItemText primary="Log Out" />
+              </ListItem>
+            </Link>
+          </>
         ) : (
           <NavLink to="/login" activeClassName="current">
             <ListItem onClick={handleDrawerToggle}>
@@ -130,6 +132,13 @@ function Navbar(props) {
             </ListItem>
           </NavLink>
         )}
+        <Divider />
+        <NavLink to="/about" activeClassName="current">
+          <ListItem onClick={handleDrawerToggle}>
+            <ListItemText primary="About" />
+          </ListItem>
+        </NavLink>
+        <Divider />
       </List>
     </div>
   );
