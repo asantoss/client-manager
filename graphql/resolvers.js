@@ -61,6 +61,19 @@ const resolvers = {
     clients: async User => {
       return await User.getClients();
     }
+  },
+  Client: {
+    user: async Client => {
+      return await Client.getUser();
+    },
+    invoices: async Client => {
+      return await Client.getInvoices();
+    }
+  },
+  Invoice: {
+    client: async Invoice => {
+      return await Invoice.getClient();
+    }
   }
 };
 

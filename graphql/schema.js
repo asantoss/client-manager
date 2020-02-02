@@ -18,6 +18,15 @@ const typeDefs = gql`
     address: String
     city: String
     zipCode: String
+    user: User
+    invoices: [Invoice]
+  }
+  type Invoice {
+    id: ID!
+    dueDate: String
+    products: [String]
+    client: Client
+    total: Int
   }
   type Query {
     getUser(id: ID!): User
@@ -42,6 +51,7 @@ const typeDefs = gql`
       city: String
       zipCode: String
     ): Client
+    createInvoice(dueDate: String, products: String): Invoice
     updateUser(
       id: Int!
       firstName: String

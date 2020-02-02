@@ -34,7 +34,7 @@ async function startServer() {
   app.use(async (req, res, next) => {
     const accessToken = req.cookies["access-token"];
     const refreshToken = req.cookies["refresh-token"];
-    //*** Check if we got any of the tokens */
+    // *** Check if we got any of the tokens */
     if (!refreshToken && !accessToken) {
       return next();
     }
