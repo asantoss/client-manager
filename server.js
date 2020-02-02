@@ -1,3 +1,4 @@
+require("dotenv").config();
 const express = require("express");
 const mockData = require("./helpers/mockData");
 const cookieParser = require("cookie-parser");
@@ -8,6 +9,7 @@ const db = require("./models");
 const jwt = require("jsonwebtoken");
 const createTokens = require("./helpers/auth");
 const cors = require("cors");
+
 const PORT = process.env.PORT;
 
 async function startServer() {
@@ -61,10 +63,10 @@ async function startServer() {
     // *** If we made it here the refreshToken is valid && we will reAuthenticate for another week.
     const tokens = createTokens(user);
     res.cookie("refresh-token", tokens.refreshToken, {
-      maxAge: 1000 * 60 * 15
+      maxAge: 1000 * 60 * 60 * 24 * 7
     });
     res.cookie("access-token", tokens.accessToken, {
-      maxAge: 1000 * 60 * 60 * 24 * 7
+      maxAge: 1000 * 60 * 15
     });
     return next();
   });
