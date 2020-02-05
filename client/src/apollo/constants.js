@@ -35,12 +35,20 @@ export const REGISTER = gql`
     $lastName: String!
     $email: String!
     $password: String!
+    $phoneNumber: String
+    $address: String
+    $city: String
+    $companyName: String
   ) {
     register(
       firstName: $firstName
       lastName: $lastName
       email: $email
       password: $password
+      companyName: $companyName
+      city: $city
+      address: $address
+      phoneNumber: $phoneNumber
     ) {
       firstName
       lastName

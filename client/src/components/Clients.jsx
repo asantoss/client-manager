@@ -20,47 +20,46 @@ export default function Clients() {
     const { firstName, lastName, clients } = data.getMe;
     return (
       <Grid container>
-        {clients.map(client => {
-          return (
-            <Grid item xs="12" key={client.id}>
-              <ExpansionPanel>
-                <ExpansionPanelSummary expandIcon={<ExpandMore />}>
-                  <Typography variant="h5">
-                    {client.firstName} {client.lastName}
-                  </Typography>
-                </ExpansionPanelSummary>
-                <ExpansionPanelDetails>
-                  <div
-                    className={css`
-                      display: flex;
-                      width: 100%;
-                      justify-content: space-evenly;
-                      flex-direction: column;
-                    `}
-                  >
-                    <div>
-                      <Typography variant="h6">Phone Number:</Typography>
+        {clients.length ? (
+          clients.map(client => {
+            return (
+              <Grid item xs={12} key={client.id}>
+                <ExpansionPanel>
+                  <ExpansionPanelSummary expandIcon={<ExpandMore />}>
+                    <Typography variant="h5">
+                      {client.firstName} {client.lastName}
+                    </Typography>
+                  </ExpansionPanelSummary>
+                  <ExpansionPanelDetails>
+                    <div
+                      className={css`
+                        display: flex;
+                        justify-content: space-evenly;
+                        flex-direction: column;
+                      `}
+                    >
+                      <Typography>Phone Number:</Typography>
                       <a href={`tel:${client.phoneNumber}`}>
                         {client.phoneNumber}
                       </a>{" "}
-                    </div>
-                    <div>
-                      <Typography variant="h6">Email Address:</Typography>
-                      <span>{client.email}</span>{" "}
-                    </div>
-                    <div>
-                      <Typography variant="h6">Address: </Typography>
+                      <br />
+                      <Typography>Email Address:</Typography>
+                      <span>{client.email}</span> <br />
+                      <Typography>Address: </Typography>
                       <span>
-                        {client.address} , {client.city}, {client.zipCode}
+                        {client.address} <br />
+                        {client.city} <br /> {client.zipCode}
                       </span>{" "}
                     </div>
-                  </div>
-                </ExpansionPanelDetails>
-              </ExpansionPanel>
-              <Divider />
-            </Grid>
-          );
-        })}
+                  </ExpansionPanelDetails>
+                </ExpansionPanel>
+                <Divider />
+              </Grid>
+            );
+          })
+        ) : (
+          <p>Please add some clients.</p>
+        )}
       </Grid>
     );
   }

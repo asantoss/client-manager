@@ -46,8 +46,13 @@ export default function SignUp() {
     initialValues: {
       firstName: "",
       lastName: "",
+      email: "",
       password: "",
-      email: ""
+      phoneNumber: "",
+      address: "",
+      city: "",
+      zipCode: "",
+      companyName: ""
     },
     validationSchema: SignUpSchema,
     onSubmit: values => {
@@ -63,8 +68,6 @@ export default function SignUp() {
   return (
     <form
       className={css`
-        height: 500px;
-        width: 600px;
         margin: auto;
         display: flex;
         flex-direction: column;
@@ -73,39 +76,32 @@ export default function SignUp() {
           align-self: flex-end;
           width: 100px;
         }
+        label {
+          text-transform: capitalize;
+        }
+        & > div {
+          margin-bottom: 1em;
+        }
       `}
       onSubmit={formik.handleSubmit}
     >
       <h1>Sign Up</h1>
       <InputLabel />
-      <TextField
-        name="firstName"
-        label="First Name"
-        variant="outlined"
-        onChange={formik.handleChange}
-        value={formik.values.firstName}
-        helperText={formik.errors.firstName && formik.errors.firstName}
-        error={!!formik.errors.firstName}
-      />
-      <TextField
-        name="lastName"
-        label="Last Name"
-        variant="outlined"
-        onChange={formik.handleChange}
-        value={formik.values.lastName}
-        helperText={formik.errors.lastName && formik.errors.lastName}
-        error={!!formik.errors.lastName}
-      />
-      <TextField
-        type="email"
-        name="email"
-        variant="outlined"
-        label="Email"
-        onChange={formik.handleChange}
-        value={formik.values.email}
-        error={!!formik.errors.email}
-        helperText={formik.errors.email && formik.errors.email}
-      />
+      {Object.keys(formik.values).map(value => {
+        if (value !== "password") {
+          return (
+            <TextField
+              name={value}
+              label={value}
+              variant="outlined"
+              onChange={formik.handleChange}
+              value={formik.values[value]}
+              helperText={formik.errors[value] && formik.errors[value]}
+              error={!!formik.errors[value]}
+            />
+          );
+        }
+      })}
       <TextField
         variant="outlined"
         type={isPasswordShown ? "text" : "password"}

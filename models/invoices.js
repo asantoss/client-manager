@@ -5,7 +5,8 @@ module.exports = (sequelize, DataTypes) => {
     {
       dateDue: DataTypes.DATE,
       products: DataTypes.JSON,
-      total: DataTypes.INTEGER
+      total: DataTypes.INTEGER,
+      isPaid: DataTypes.BOOLEAN
     },
     {}
   );

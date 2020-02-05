@@ -8,6 +8,11 @@ const typeDefs = gql`
     email: String
     password: String
     clients: [Client]
+    companyName: String
+    address: String
+    phoneNumber: String
+    city: String
+    zipCode: String
   }
   type Client {
     id: ID!
@@ -41,6 +46,10 @@ const typeDefs = gql`
       lastName: String
       email: String
       password: String
+      phoneNumber: String
+      address: String
+      city: String
+      companyName: String
     ): User
     createClient(
       firstName: String

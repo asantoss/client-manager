@@ -14,6 +14,7 @@ export default function Layout({ children }) {
           flex-direction: column;
         }
         main {
+          margin-top: 1em;
           display: flex;
           min-height: 90vh;
           width: 100%;
