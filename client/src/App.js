@@ -10,7 +10,8 @@ import { HttpLink } from "apollo-link-http";
 import { ApolloProvider } from "@apollo/react-hooks";
 import { Provider } from "react-redux";
 import store from "./store";
-import InvoiceForm from "./components/Forms/InvoiceForm";
+
+import InvoiceCreator from "./pages/InvoiceCreator";
 
 const cache = new InMemoryCache();
 const link = new HttpLink({
@@ -46,7 +47,11 @@ function App() {
               <Route path="/clients" component={Clients} />
               <Route path="/register" component={SignUp} />
               <Route path="/login" exact component={SignIn} />
-              <Route path="/:clientid/newquote" exact component={InvoiceForm} />
+              <Route
+                path="/:clientid/newquote"
+                exact
+                component={InvoiceCreator}
+              />
             </Layout>
           </Router>
         </Provider>
