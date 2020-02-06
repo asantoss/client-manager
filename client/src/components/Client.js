@@ -6,15 +6,14 @@ import {
   Typography,
   ExpansionPanelDetails,
   ExpansionPanelActions,
-  Divider,
   Button
 } from "@material-ui/core";
 import { ExpandMore, Delete, PlusOne } from "@material-ui/icons";
 import { css } from "@emotion/core";
 import { Link } from "react-router-dom";
-export default function Client({ client }) {
+export default function Client({ client, className }) {
   return (
-    <Grid item xs="12" key={client.id}>
+    <Grid item key={client.id} className={className}>
       <ExpansionPanel>
         <ExpansionPanelSummary expandIcon={<ExpandMore />}>
           <Typography variant="h5">
@@ -23,9 +22,9 @@ export default function Client({ client }) {
         </ExpansionPanelSummary>
         <ExpansionPanelDetails>
           <Grid
+            container
             css={css`
               display: flex;
-              width: 100%;
               justify-content: space-evenly;
               flex-direction: column;
               flex-wrap: 1;
@@ -73,7 +72,6 @@ export default function Client({ client }) {
           </Grid>
         </ExpansionPanelDetails>
       </ExpansionPanel>
-      <Divider />
     </Grid>
   );
 }

@@ -12,17 +12,20 @@ import {
   StepContent,
   Button,
   Typography,
-  IconButton
+  IconButton,
+  Divider
 } from "@material-ui/core";
 import ProductPanel from "../components/Forms/ProductPanel";
-import { Add, AddCircle } from "@material-ui/icons";
+import { Add, AddCircle, CloseOutlined } from "@material-ui/icons";
+import { useLocation } from "react-router-dom";
 
 function getSteps() {
   return ["Company Information", "Products", "Preview"];
 }
 
 export default function InvoiceCreator() {
-  const [isOverlaid, setOverlay] = useState(false);
+  const [isProductOpen, setProductOpen] = useState(false);
+  const [isClientOpen, setClientOpen] = useState(false);
   const [invoiceData, setInvoiceData] = useState({
     client: {
       firstName: "",
@@ -39,22 +42,16 @@ export default function InvoiceCreator() {
       phoneNumber: "",
       city: "",
       zipCode: ""
-    }
+    },
+    products: []
   });
-
-  function getStepContent(step) {
-    switch (step) {
-      case 0:
-        return <ClientInformation activeStep={step} />;
-      case 1:
-        return <ProductPanel activeStep={step} />;
-      case 2:
-        return "This is the bit I really care about!";
-      default:
-        return "Unknown step";
+  const { state } = useLocation();
+  useEffect(() => {
+    if (state) {
+      setInvoiceData(s => ({ ...s, client: { ...state } }));
     }
-  }
-  const steps = getSteps();
+    return () => {};
+  }, [state]);
 
   return (
     <Grid
@@ -71,31 +68,112 @@ export default function InvoiceCreator() {
             color: green;
           }
         }
-        .invoice-panel {
-          display: ${({ isHidden }) => (isHidden ? "none" : "block")};
+        .product {
+          background: rgba(0, 0, 0, 0.8);
+          color: white;
+          &:nth-child(even) {
+            background: rgba(0, 0, 0, 0.5);
+            color: white;
+          }
         }
       `}
     >
       <Grid item className="invoice-panel">
         <Typography>CUSTOMER</Typography>
         <hr />
-        {!invoiceData.client.firstName && !invoiceData.client.email && (
-          <IconButton>
-            <AddCircle /> <p>Add Customer</p>
+        {isClientOpen && (
+          <ClientInformation
+            setInvoiceData={setInvoiceData}
+            setClientOpen={setClientOpen}
+            isClientOpen={isClientOpen}
+          />
+        )}
+        {!invoiceData.client.firstName && !invoiceData.client.email ? (
+          <IconButton
+            onClick={() => {
+              setClientOpen(!isClientOpen);
+            }}
+          >
+            <AddCircle /> <p>Add Customer Information</p>
           </IconButton>
+        ) : (
+          <>
+            <Typography>
+              {invoiceData.client.firstName} {invoiceData.client.lastName}
+            </Typography>
+            <Typography>{invoiceData.client.email}</Typography>
+          </>
         )}
       </Grid>
-      <Grid item className="invoice-panel">
+      <Grid item className="invoice-panel-products">
+        <hr />
         <Typography>Products</Typography>
         <hr />
-        <IconButton>
-          <AddCircle />
-          <p>Add Product</p>
+        {invoiceData.products &&
+          invoiceData.products.map((product, index) => {
+            return (
+              <div
+                key={index}
+                className="product"
+                css={css`
+                  display: flex;
+                  justify-content: space-between;
+                  text-align: left;
+                  padding: 0 1em;
+                  & > p {
+                    display: flex;
+                    flex-direction: column;
+                    font-size: 0.9em;
+                    span {
+                      font-size: 0.7em;
+                    }
+                  }
+                `}
+              >
+                <p>
+                  <span>Name: </span>
+                  {product.productName}
+                </p>
+                {product.quantity > 0 && (
+                  <p>
+                    <span>Qty.</span>
+                    {product.quantity}
+                  </p>
+                )}
+                <p>
+                  <span>Price</span>
+                  {product.price}
+                </p>{" "}
+              </div>
+            );
+          })}
+
+        {isProductOpen && <ProductPanel submit={setInvoiceData} />}
+        <IconButton
+          onClick={() => {
+            setProductOpen(!isProductOpen);
+          }}
+        >
+          {!isProductOpen ? (
+            <>
+              <AddCircle />
+              <p>Add Product</p>
+            </>
+          ) : (
+            <>
+              <CloseOutlined />
+              <p>Cancel</p>
+            </>
+          )}
         </IconButton>
       </Grid>
       <Grid item className="invoice-panel">
         <Typography>Details</Typography>
         <hr />
+        <Typography variant="h6">
+          Total:{" "}
+          {invoiceData.products.reduce((prev, acc) => prev + acc.price, 0)}
+        </Typography>
       </Grid>
     </Grid>
   );

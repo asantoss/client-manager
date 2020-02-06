@@ -15,7 +15,7 @@ export default function Layout({ children }) {
       `}
     >
       <Navbar />
-      <Grid container xs={12}>
+      <Grid className="main" container>
         {children}
       </Grid>
       <footer></footer>

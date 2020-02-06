@@ -1,16 +1,9 @@
 import React from "react";
 import { GET_CLIENTS } from "../apollo/constants";
 import { useQuery } from "@apollo/react-hooks";
-import {
-  Grid,
-  ExpansionPanel,
-  Typography,
-  ExpansionPanelSummary,
-  ExpansionPanelDetails,
-  Divider
-} from "@material-ui/core";
+import { Grid, Divider } from "@material-ui/core";
 import { ExpandMore } from "@material-ui/icons";
-import { css } from "emotion";
+import { css } from "@emotion/core";
 import Client from "./Client";
 
 export default function Clients() {
@@ -20,9 +13,25 @@ export default function Clients() {
   if (data && data.getMe) {
     const { firstName, lastName, clients } = data.getMe;
     return (
-      <Grid container>
+      <Grid
+        container
+        css={css`
+          @media screen and (min-width: 700px) {
+            margin-left: 220px;
+          }
+          & .client-panel {
+            margin-bottom: 1em;
+          }
+        `}
+      >
         {clients.map(client => {
-          return <Client client={client} />;
+          return (
+            <>
+              <Divider />
+              <Client className="client-panel" client={client} />
+              <Divider />
+            </>
+          );
         })}
       </Grid>
     );
