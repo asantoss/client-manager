@@ -17,7 +17,7 @@ import {
 } from "@material-ui/core";
 import ProductPanel from "../components/Forms/ProductPanel";
 import { Add, AddCircle, CloseOutlined } from "@material-ui/icons";
-import { useLocation } from "react-router-dom";
+import { useLocation, Link } from "react-router-dom";
 
 function getSteps() {
   return ["Company Information", "Products", "Preview"];
@@ -52,6 +52,13 @@ export default function InvoiceCreator() {
     }
     return () => {};
   }, [state]);
+  const totalCost = invoiceData.products.reduce((prev, acc) => {
+    if (acc.quantity) {
+      return prev + acc.price * acc.quantity;
+    }
+    return prev + acc.price;
+  }, 0);
+  const tax = totalCost * 0.07;
 
   return (
     <Grid
@@ -61,12 +68,12 @@ export default function InvoiceCreator() {
       alignItems="center"
       justify="space-evenly"
       css={css`
+        .panel-actions {
+          font-size: 0.8em;
+          color: green;
+        }
         & > div {
           width: 100%;
-          button {
-            font-size: 0.8em;
-            color: green;
-          }
         }
         .product {
           background: rgba(0, 0, 0, 0.8);
@@ -75,6 +82,11 @@ export default function InvoiceCreator() {
             background: rgba(0, 0, 0, 0.5);
             color: white;
           }
+        }
+        .invoice-actions {
+          margin: 1em;
+          display: flex;
+          justify-content: space-evenly;
         }
       `}
     >
@@ -90,6 +102,7 @@ export default function InvoiceCreator() {
         )}
         {!invoiceData.client.firstName && !invoiceData.client.email ? (
           <IconButton
+            className="panel-actions"
             onClick={() => {
               setClientOpen(!isClientOpen);
             }}
@@ -129,6 +142,15 @@ export default function InvoiceCreator() {
                     }
                   }
                 `}
+                onClick={() => {
+                  setInvoiceData(s => ({
+                    ...s,
+                    products: [
+                      ...s.products.slice(0, index),
+                      ...s.products.slice(index + 1)
+                    ]
+                  }));
+                }}
               >
                 <p>
                   <span>Name: </span>
@@ -150,6 +172,7 @@ export default function InvoiceCreator() {
 
         {isProductOpen && <ProductPanel submit={setInvoiceData} />}
         <IconButton
+          className="panel-actions"
           onClick={() => {
             setProductOpen(!isProductOpen);
           }}
@@ -162,7 +185,7 @@ export default function InvoiceCreator() {
           ) : (
             <>
               <CloseOutlined />
-              <p>Cancel</p>
+              <p>Close</p>
             </>
           )}
         </IconButton>
@@ -170,10 +193,20 @@ export default function InvoiceCreator() {
       <Grid item className="invoice-panel">
         <Typography>Details</Typography>
         <hr />
-        <Typography variant="h6">
-          Total:{" "}
-          {invoiceData.products.reduce((prev, acc) => prev + acc.price, 0)}
+        <Typography>
+          Tax: {tax.toLocaleString("en-us", "currency")} $
         </Typography>
+        <Typography variant="h6">
+          Total: {(totalCost + tax).toLocaleString("en-us", "currency")} $
+        </Typography>
+        <div className="invoice-actions">
+          <Button variant="contained" color="primary">
+            Save
+          </Button>
+          <Button variant="contained" color="primary">
+            <Link>Preview</Link>
+          </Button>
+        </div>
       </Grid>
     </Grid>
   );

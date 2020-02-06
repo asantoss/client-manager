@@ -13,7 +13,7 @@ import { css } from "@emotion/core";
 import { Link } from "react-router-dom";
 export default function Client({ client, className }) {
   return (
-    <Grid item key={client.id} className={className}>
+    <Grid item xs={12} key={client.id} className={className}>
       <ExpansionPanel>
         <ExpansionPanelSummary expandIcon={<ExpandMore />}>
           <Typography variant="h5">

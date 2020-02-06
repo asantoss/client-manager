@@ -13,8 +13,7 @@ export default function Clients() {
   if (data && data.getMe) {
     const { firstName, lastName, clients } = data.getMe;
     return (
-      <Grid
-        container
+      <div
         css={css`
           @media screen and (min-width: 700px) {
             margin-left: 220px;
@@ -27,13 +26,13 @@ export default function Clients() {
         {clients.map(client => {
           return (
             <>
-              <Divider />
+              <Divider key={client.id} />
               <Client className="client-panel" client={client} />
               <Divider />
             </>
           );
         })}
-      </Grid>
+      </div>
     );
   }
 }
