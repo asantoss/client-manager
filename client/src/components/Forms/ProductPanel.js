@@ -27,10 +27,8 @@ export default function ProductPanel({ submit }) {
   return (
     <form
       css={css`
-        width: 600px;
         display: flex;
         align-self: center;
-        justify-content: space-between;
         align-items: flex-end;
         margin-bottom: 1em;
         select {
@@ -39,16 +37,12 @@ export default function ProductPanel({ submit }) {
         input {
           margin: 0 1.5em;
           &[name="productName"] {
-            width: 100px;
           }
           &[name="price"] {
-            width: 50px;
           }
           &[name="quantity"] {
-            width: 25px;
           }
           &[name="isFlat"] {
-            width: 30px;
           }
         }
       `}
@@ -58,14 +52,12 @@ export default function ProductPanel({ submit }) {
         name="productName"
         type="text"
         label="Name"
-        variant="outlined"
         onChange={formik.handleChange}
         onBlur={formik.handleBlur}
         value={formik.values.productName}
       />
       <TextField
         select
-        variant="outlined"
         name="isFlat"
         onChange={e => {
           console.log(e.target.value);
@@ -80,7 +72,6 @@ export default function ProductPanel({ submit }) {
         <TextField
           name="quantity"
           label="Qty."
-          variant="outlined"
           onBlur={formik.handleBlur}
           onChange={formik.handleChange}
           value={formik.values.quantity}
@@ -96,8 +87,8 @@ export default function ProductPanel({ submit }) {
         min="0.01"
         step="0.01"
         max="2500"
-        variant="outlined"
       />
+      <br />
       <Fab color="primary" type="submit">
         <Add />
       </Fab>

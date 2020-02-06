@@ -47,11 +47,7 @@ function App() {
               <Route path="/clients" component={Clients} />
               <Route path="/register" component={SignUp} />
               <Route path="/login" exact component={SignIn} />
-              <Route
-                path="/:clientid/newquote"
-                exact
-                component={InvoiceCreator}
-              />
+              <Route path="/newquote" exact component={InvoiceCreator} />
             </Layout>
           </Router>
         </Provider>

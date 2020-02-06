@@ -22,7 +22,7 @@ export default function Client({ client }) {
           </Typography>
         </ExpansionPanelSummary>
         <ExpansionPanelDetails>
-          <div
+          <Grid
             css={css`
               display: flex;
               width: 100%;
@@ -30,11 +30,9 @@ export default function Client({ client }) {
               flex-direction: column;
               flex-wrap: 1;
               & > .client-actions {
-                align-self: flex-end;
-                display: flex;
-                justify-content: space-between;
-                width: 30%;
+                align-self: flex-start;
                 button {
+                  display: inline-block;
                   margin: 1em;
                   color: white;
                   &.delete-button {
@@ -44,24 +42,22 @@ export default function Client({ client }) {
               }
             `}
           >
-            <div>
-              <Typography variant="h6">Phone Number:</Typography>
-              <a href={`tel:${client.phoneNumber}`}>
-                {client.phoneNumber}
-              </a>{" "}
-            </div>
-            <div>
-              <Typography variant="h6">Email Address:</Typography>
-              <span>{client.email}</span>{" "}
-            </div>
-            <div>
-              <Typography variant="h6">Address: </Typography>
-              <span>
-                {client.address} , {client.city}, {client.zipCode}
-              </span>{" "}
-            </div>
-            <div className="client-actions">
-              <Link to={{ pathname: `/${client.id}/newquote` }}>
+            <Typography>Phone Number:</Typography>
+            <a href={`tel:${client.phoneNumber}`}>{client.phoneNumber}</a>{" "}
+            <br />
+            <Typography>Email Address:</Typography>
+            <span>{client.email}</span> <br />
+            <Typography>Address: </Typography>
+            <span>
+              {client.address} <br /> {client.city} <br /> {client.zipCode}
+            </span>{" "}
+            <Grid item className="client-actions">
+              <Link
+                to={{
+                  pathname: `/newquote`,
+                  state: { ...client }
+                }}
+              >
                 <Button variant="contained" color="primary">
                   Quote
                 </Button>
@@ -73,8 +69,8 @@ export default function Client({ client }) {
               >
                 Delete
               </Button>
-            </div>
-          </div>
+            </Grid>
+          </Grid>
         </ExpansionPanelDetails>
       </ExpansionPanel>
       <Divider />
