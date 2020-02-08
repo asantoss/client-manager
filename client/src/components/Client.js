@@ -53,7 +53,7 @@ export default function Client({ client, className }) {
             <Grid item className="client-actions">
               <Link
                 to={{
-                  pathname: `/newquote`,
+                  pathname: `/invoice/creator`,
                   state: { ...client }
                 }}
               >

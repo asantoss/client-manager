@@ -12,6 +12,7 @@ import { Provider } from "react-redux";
 import store from "./store";
 
 import InvoiceCreator from "./pages/InvoiceCreator";
+import TopBar from "./components/Layouts/TopBar";
 
 const cache = new InMemoryCache();
 const link = new HttpLink({
@@ -36,19 +37,46 @@ const client = new ApolloClient({
     }
   }
 });
+
 function App() {
   return (
     <div className="App">
       <ApolloProvider client={client}>
         <Provider store={store}>
           <Router>
-            <Layout>
-              <Route path="/" exact />
-              <Route path="/clients" component={Clients} />
-              <Route path="/register" component={SignUp} />
-              <Route path="/login" exact component={SignIn} />
-              <Route path="/newquote" exact component={InvoiceCreator} />
-            </Layout>
+            <TopBar />
+            <Route
+              path="/clients"
+              render={() => {
+                return (
+                  <Layout>
+                    <Clients />
+                  </Layout>
+                );
+              }}
+            />
+            <Route
+              path="/invoice/creator"
+              render={() => {
+                return (
+                  <Layout>
+                    <InvoiceCreator />
+                  </Layout>
+                );
+              }}
+            />
+            <Route
+              path="/invoices"
+              render={() => {
+                return (
+                  <Layout>
+                    <InvoiceCreator />
+                  </Layout>
+                );
+              }}
+            />
+            <Route path="/register" component={SignUp} />
+            <Route path="/login" exact component={SignIn} />
           </Router>
         </Provider>
       </ApolloProvider>

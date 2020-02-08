@@ -1,24 +1,10 @@
 import React, { useState } from "react";
 import { NavLink, withRouter, Link } from "react-router-dom";
 import { css } from "@emotion/core";
-import {
-  AppBar,
-  Toolbar,
-  IconButton,
-  Typography,
-  Drawer,
-  List,
-  ListItem,
-  Hidden,
-  ListItemText,
-  Divider,
-  Fab
-} from "@material-ui/core";
+import { AppBar, Toolbar, IconButton } from "@material-ui/core";
 import { makeStyles, useTheme } from "@material-ui/core/styles";
-import { Menu, Add, More, Receipt } from "@material-ui/icons";
-import { connect, useSelector, useDispatch } from "react-redux";
-
-const drawerWidth = 200;
+import { More, ExitToApp, AssignmentInd } from "@material-ui/icons";
+import { useSelector, useDispatch } from "react-redux";
 
 const useStyles = makeStyles(theme => ({
   text: {
@@ -34,8 +20,6 @@ const useStyles = makeStyles(theme => ({
     backgroundColor: theme.palette.background.paper
   },
   appBar: {
-    top: "auto",
-    bottom: 0,
     backgroundColor: "#212120"
   },
   grow: {
@@ -51,20 +35,14 @@ const useStyles = makeStyles(theme => ({
   }
 }));
 
-function Navbar(props) {
+function Topbar(props) {
   const { isLoggedIn } = useSelector(state => state.user);
   const dispatch = useDispatch();
-  const [isOpen, setOpen] = useState(false);
   const theme = useTheme();
   const classes = useStyles(theme);
-  const handleDrawerToggle = () => {
-    if (window && window.innerWidth < 600) {
-      setOpen(!isOpen);
-    }
-  };
   const handleLogout = () => {
-    handleDrawerToggle();
     dispatch({ type: "LOGOUT" });
+    props.history.push("/login");
   };
   return (
     <div className={classes.root}>
@@ -80,20 +58,25 @@ function Navbar(props) {
             }
           `}
         >
-          <NavLink to="/about" activeClassName="current">
-            <IconButton edge="start" aria-label="open drawer">
-              <Menu />
+          {isLoggedIn ? (
+            <NavLink to="/login" activeClassName="current">
+              <IconButton edge="end">
+                <ExitToApp />
+              </IconButton>
+            </NavLink>
+          ) : (
+            <IconButton
+              edge="start"
+              aria-label="open drawer"
+              onClick={handleLogout}
+            >
+              <AssignmentInd />
             </IconButton>
-          </NavLink>
+          )}
           {/* <Fab color="secondary" aria-label="add" className={classes.fabButton}>
             <Add />
           </Fab> */}
-          <NavLink to="/clients" activeClassName="current">
-            <IconButton>
-              <Receipt />
-            </IconButton>
-          </NavLink>
-          <NavLink to="/invoices" activeClassName="current">
+          <NavLink to="/" activeClassName="current">
             <IconButton edge="end">
               <More />
             </IconButton>
@@ -104,4 +87,4 @@ function Navbar(props) {
   );
 }
 
-export default withRouter(Navbar);
+export default withRouter(Topbar);

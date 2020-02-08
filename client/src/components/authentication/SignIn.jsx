@@ -43,14 +43,13 @@ export default function SignIn() {
   if (loading) return <p>Loading....</p>;
 
   if (data && data.login) {
-    return <Redirect to="/" />;
+    return <Redirect to="/clients" />;
   }
   return (
     <form
       className={css`
-        height: 500px;
-        width: 600px;
-        margin: auto;
+        padding: 1.5em;
+        height: 80vh;
         display: flex;
         flex-direction: column;
         justify-content: space-evenly;

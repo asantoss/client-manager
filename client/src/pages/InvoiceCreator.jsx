@@ -2,56 +2,27 @@ import React, { useState, useEffect } from "react";
 import { PDFViewer } from "@react-pdf/renderer";
 import InvoiceForm from "../components/Forms/InvoiceForm";
 import InvoicePreview from "../components/InvoicePreview";
+import Modal from "../Modal";
 import { css } from "@emotion/core";
 import ClientInformation from "../components/Forms/ClientInformation";
-import {
-  Stepper,
-  Step,
-  StepLabel,
-  Grid,
-  StepContent,
-  Button,
-  Typography,
-  IconButton,
-  Divider
-} from "@material-ui/core";
+import { Grid, Button, Typography, IconButton } from "@material-ui/core";
 import ProductPanel from "../components/Forms/ProductPanel";
-import { Add, AddCircle, CloseOutlined } from "@material-ui/icons";
+import { useSelector, useDispatch } from "react-redux";
+import { AddCircle, CloseOutlined } from "@material-ui/icons";
 import { useLocation, Link } from "react-router-dom";
-
-function getSteps() {
-  return ["Company Information", "Products", "Preview"];
-}
 
 export default function InvoiceCreator() {
   const [isProductOpen, setProductOpen] = useState(false);
   const [isClientOpen, setClientOpen] = useState(false);
-  const [invoiceData, setInvoiceData] = useState({
-    client: {
-      firstName: "",
-      lastName: "",
-      email: "",
-      phoneNumber: "",
-      address: "",
-      city: "",
-      zipCode: ""
-    },
-    company: {
-      companyName: "",
-      address: "",
-      phoneNumber: "",
-      city: "",
-      zipCode: ""
-    },
-    products: []
-  });
+  const invoiceData = useSelector(state => state.invoice);
   const { state } = useLocation();
+  const dispatch = useDispatch();
   useEffect(() => {
     if (state) {
-      setInvoiceData(s => ({ ...s, client: { ...state } }));
+      dispatch({ type: "SET_CLIENT", payload: { ...state } });
     }
-    return () => {};
   }, [state]);
+
   const totalCost = invoiceData.products.reduce((prev, acc) => {
     if (acc.quantity) {
       return prev + acc.price * acc.quantity;
@@ -95,7 +66,6 @@ export default function InvoiceCreator() {
         <hr />
         {isClientOpen && (
           <ClientInformation
-            setInvoiceData={setInvoiceData}
             setClientOpen={setClientOpen}
             isClientOpen={isClientOpen}
           />
@@ -143,13 +113,10 @@ export default function InvoiceCreator() {
                   }
                 `}
                 onClick={() => {
-                  setInvoiceData(s => ({
-                    ...s,
-                    products: [
-                      ...s.products.slice(0, index),
-                      ...s.products.slice(index + 1)
-                    ]
-                  }));
+                  dispatch({
+                    type: "REMOVE_PRODUCT",
+                    payload: { index }
+                  });
                 }}
               >
                 <p>
@@ -170,7 +137,11 @@ export default function InvoiceCreator() {
             );
           })}
 
-        {isProductOpen && <ProductPanel submit={setInvoiceData} />}
+        {isProductOpen && (
+          <Modal>
+            <ProductPanel setProductOpen={setProductOpen} />
+          </Modal>
+        )}
         <IconButton
           className="panel-actions"
           onClick={() => {

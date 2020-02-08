@@ -68,8 +68,8 @@ export default function SignUp() {
   return (
     <form
       className={css`
-        margin: auto;
         display: flex;
+        padding: 1.5em;
         flex-direction: column;
         justify-content: space-evenly;
         & > button {

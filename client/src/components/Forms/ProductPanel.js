@@ -15,27 +15,27 @@ import {
 } from "@material-ui/core";
 import { Add, Label, Close } from "@material-ui/icons";
 import { css } from "@emotion/core";
+import { useDispatch } from "react-redux";
 
-export default function ProductPanel({ submit }) {
+export default function ProductPanel({ setProductOpen }) {
   const [localProducts, setlocalProducts] = useState([]);
-
+  const dispatch = useDispatch();
   const [isFlat, setIsflat] = useState(true);
   const formik = useFormik({
     initialValues: {
       productName: "",
+      description: "",
       price: 0,
       quantity: 0
     },
     onSubmit: product => {
-      submit(s => {
-        const products = new Set([...s.products, product]);
-        return { ...s, products: [...products] };
-      });
+      dispatch({ type: "ADD_PRODUCT", payload: product });
       localStorage.setItem(
         "products",
         JSON.stringify([...localProducts, product])
       );
       setlocalProducts(s => [...s, product]);
+      setProductOpen(s => !s);
       formik.resetForm();
     }
   });
@@ -44,44 +44,79 @@ export default function ProductPanel({ submit }) {
     if (localProducts) {
       setlocalProducts(s => [...s, ...localProducts]);
     }
+    return () => {};
   }, []);
   return (
-    <>
+    <div
+      css={css`
+        display: flex;
+        flex-direction: column;
+        width: 90vw;
+        position: absolute;
+        z-index: 3;
+        background-color: #212120;
+        padding: 1em;
+        .main-actions {
+          color: #f7a705;
+          display: flex;
+          justify-content: space-between;
+          width: 100%;
+        }
+      `}
+    >
+      <div className="main-actions">
+        <p>Cancel</p>
+        <p>Close</p>
+      </div>
       <form
         css={css`
           display: flex;
           align-self: center;
-          align-items: flex-end;
           justify-content: space-between;
+          flex-direction: column;
+          width: 100%;
           flex-wrap: wrap;
           margin-bottom: 1em;
           [name="price"] {
             width: 80px;
           }
+          label {
+            margin: 0.2em;
+            color: white;
+            font-weight: 400;
+          }
+          input {
+            color: white;
+            margin: 0.8em;
+          }
+          .mui-focused fieldset {
+            border-color: green;
+          }
         `}
         onSubmit={formik.handleSubmit}
       >
-        <TextField
+        <label htmlFor="productName">Name</label>
+        <Input
           name="productName"
           type="text"
-          label="Name"
           onChange={formik.handleChange}
           onBlur={formik.handleBlur}
           value={formik.values.productName}
           required
         />
-        <Typography>{isFlat ? "Flat" : "Qty"}</Typography>
-        <Switch
-          name="isFlat"
-          onChange={e => {
-            console.log(e.target.value);
-            setIsflat(!isFlat);
-          }}
-          checked={isFlat}
-          value="isFlat"
+        <label htmlFor="">Description</label>
+        <Input
+          name="description"
+          type="text"
+          label="Description"
+          onChange={formik.handleChange}
+          onBlur={formik.handleBlur}
+          value={formik.values.description}
+          placeholder="Optional"
+          required
         />
         {!isFlat && (
-          <TextField
+          <Input
             name="quantity"
             label="Qty."
             onBlur={formik.handleBlur}
@@ -92,6 +127,7 @@ export default function ProductPanel({ submit }) {
         )}
         <Input
           type="number"
+          variant="outlined"
           name="price"
           label="Price"
           onBlur={formik.handleBlur}
@@ -172,6 +208,6 @@ export default function ProductPanel({ submit }) {
           })}
         </div>
       )}
-    </>
+    </div>
   );
 }

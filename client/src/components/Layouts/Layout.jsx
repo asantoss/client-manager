@@ -12,13 +12,14 @@ export default function Layout({ children }) {
           display: flex;
           flex-direction: column;
         }
+        main {
+          margin-bottom: 1em;
+          height: 80vh;
+        }
       `}
     >
+      <main>{children}</main>
       <Navbar />
-      <Grid className="main" container>
-        {children}
-      </Grid>
-      <footer></footer>
     </div>
   );
 }

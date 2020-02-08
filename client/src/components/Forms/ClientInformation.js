@@ -12,6 +12,7 @@ import {
 } from "@material-ui/core";
 import { css } from "@emotion/core";
 import { useLocation } from "react-router-dom";
+import { useDispatch } from "react-redux";
 const ClientSchema = Yup.object().shape({
   firstName: Yup.string()
     .min(2, "Too Short!")
@@ -26,12 +27,9 @@ const ClientSchema = Yup.object().shape({
     .required("Required")
 });
 
-export default function ClientInformation({
-  setInvoiceData,
-  setClientOpen,
-  isClientOpen
-}) {
+export default function ClientInformation({ setClientOpen, isClientOpen }) {
   const [loading, setLoading] = useState(false);
+  const dispatch = useDispatch();
   const formik = useFormik({
     initialValues: {
       firstName: "",
@@ -49,7 +47,7 @@ export default function ClientInformation({
   });
   const handleNext = values => {
     setLoading(!loading);
-    setInvoiceData(s => ({ ...s, client: { ...values } }));
+    dispatch({ type: "SET_CLIENT", payload: values });
     setTimeout(() => setClientOpen(!isClientOpen), 5000);
   };
   if (loading)

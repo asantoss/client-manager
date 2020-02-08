@@ -15,6 +15,7 @@ export default function Clients() {
     return (
       <div
         css={css`
+          padding: 1.5em;
           @media screen and (min-width: 700px) {
             margin-left: 220px;
           }
@@ -25,11 +26,11 @@ export default function Clients() {
       >
         {clients.map(client => {
           return (
-            <>
-              <Divider key={client.id} />
+            <div key={client.id}>
+              <Divider />
               <Client className="client-panel" client={client} />
               <Divider />
-            </>
+            </div>
           );
         })}
       </div>
