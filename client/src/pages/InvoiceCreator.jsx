@@ -10,9 +10,16 @@ import ProductPanel from "../components/Forms/ProductPanel";
 import { useSelector, useDispatch } from "react-redux";
 import { AddCircle, CloseOutlined } from "@material-ui/icons";
 import { useLocation, Link } from "react-router-dom";
+import { useTransition, animated } from "react-spring";
+import { Transition } from "react-spring/renderprops";
 
 export default function InvoiceCreator() {
   const [isProductOpen, setProductOpen] = useState(false);
+  const transition = useTransition(isProductOpen, null, {
+    from: { opacity: 0, marginTop: 1000 },
+    enter: { opacity: 1, marginTop: 0 },
+    leave: { opacity: 0, marginTop: 1000 }
+  });
   const [isClientOpen, setClientOpen] = useState(false);
   const invoiceData = useSelector(state => state.invoice);
   const { state } = useLocation();
@@ -39,9 +46,11 @@ export default function InvoiceCreator() {
       alignItems="center"
       justify="space-evenly"
       css={css`
+        background-color: #212120;
+        color: white;
         .panel-actions {
           font-size: 0.8em;
-          color: green;
+          color: #f7a705;
         }
         & > div {
           width: 100%;
@@ -137,10 +146,13 @@ export default function InvoiceCreator() {
             );
           })}
 
-        {isProductOpen && (
-          <Modal>
-            <ProductPanel setProductOpen={setProductOpen} />
-          </Modal>
+        {transition.map(
+          ({ item, key, props }) =>
+            item && (
+              <Modal>
+                <ProductPanel style={props} setProductOpen={setProductOpen} />
+              </Modal>
+            )
         )}
         <IconButton
           className="panel-actions"
@@ -148,17 +160,8 @@ export default function InvoiceCreator() {
             setProductOpen(!isProductOpen);
           }}
         >
-          {!isProductOpen ? (
-            <>
-              <AddCircle />
-              <p>Add Product</p>
-            </>
-          ) : (
-            <>
-              <CloseOutlined />
-              <p>Close</p>
-            </>
-          )}
+          <AddCircle />
+          <p>Add Product</p>
         </IconButton>
       </Grid>
       <Grid item className="invoice-panel">

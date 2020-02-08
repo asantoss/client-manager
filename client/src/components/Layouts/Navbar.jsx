@@ -1,25 +1,10 @@
 import React, { useState } from "react";
 import { NavLink, withRouter, Link } from "react-router-dom";
 import { css } from "@emotion/core";
-import {
-  AppBar,
-  Toolbar,
-  IconButton,
-  Typography,
-  Drawer,
-  List,
-  ListItem,
-  Hidden,
-  ListItemText,
-  Divider,
-  Fab
-} from "@material-ui/core";
+import { AppBar, Toolbar, IconButton } from "@material-ui/core";
 import { makeStyles, useTheme } from "@material-ui/core/styles";
-import { Menu, Add, More, Receipt } from "@material-ui/icons";
-import { connect, useSelector, useDispatch } from "react-redux";
-
-const drawerWidth = 200;
-
+import { Menu, More, Receipt } from "@material-ui/icons";
+import { useSelector, useDispatch } from "react-redux";
 const useStyles = makeStyles(theme => ({
   text: {
     padding: theme.spacing(2, 2, 0)
@@ -52,23 +37,12 @@ const useStyles = makeStyles(theme => ({
 }));
 
 function Navbar(props) {
-  const { isLoggedIn } = useSelector(state => state.user);
-  const dispatch = useDispatch();
   const [isOpen, setOpen] = useState(false);
   const theme = useTheme();
   const classes = useStyles(theme);
-  const handleDrawerToggle = () => {
-    if (window && window.innerWidth < 600) {
-      setOpen(!isOpen);
-    }
-  };
-  const handleLogout = () => {
-    handleDrawerToggle();
-    dispatch({ type: "LOGOUT" });
-  };
   return (
     <div className={classes.root}>
-      <AppBar position="static" className={classes.appBar}>
+      <AppBar position="fixed" className={classes.appBar}>
         <Toolbar
           css={css`
             justify-content: space-between;

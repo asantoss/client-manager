@@ -7,19 +7,22 @@ export default function Layout({ children }) {
   return (
     <div
       css={css`
-        margin: auto;
-        footer {
-          display: flex;
-          flex-direction: column;
-        }
+        color: white;
+        height: 100vh;
         main {
-          margin-bottom: 1em;
-          height: 80vh;
+          overflow-y: scroll;
+          width: 100%;
+          height: 100%;
+        }
+        footer {
+          height: 56px;
         }
       `}
     >
       <main>{children}</main>
-      <Navbar />
+      <footer>
+        <Navbar />
+      </footer>
     </div>
   );
 }
