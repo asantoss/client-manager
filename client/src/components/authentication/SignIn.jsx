@@ -12,16 +12,20 @@ import { Visibility, VisibilityOff } from "@material-ui/icons";
 import { css } from "emotion";
 import { useLazyQuery } from "@apollo/react-hooks";
 import { LOGIN } from "../../apollo/constants";
-import { Link, Redirect } from "react-router-dom";
+import { Link, useHistory } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 
 export default function SignIn() {
-  const { isLoggedIn } = useSelector(state => state.user);
+  const { isLoggedIn } = useSelector(s => s.user);
+  const history = useHistory();
   const dispatch = useDispatch();
   const [isPasswordShown, setPassShowed] = useState(false);
-  const [handleLogin, { loading, data }] = useLazyQuery(LOGIN, {
+  const [handleLogin, { loading }] = useLazyQuery(LOGIN, {
     onCompleted: data => {
-      data.login && dispatch({ type: "LOGIN", payload: { ...data.login } });
+      if (data.login) {
+        dispatch({ type: "LOGIN", payload: { ...data.login } });
+        history.push("/clients");
+      }
     }
   });
   const formik = useFormik({
@@ -40,11 +44,6 @@ export default function SignIn() {
   const handleMouseDownPassword = event => {
     event.preventDefault();
   };
-  if (loading) return <p>Loading....</p>;
-
-  if (data && data.login) {
-    return <Redirect to="/clients" />;
-  }
   return (
     <form
       className={css`

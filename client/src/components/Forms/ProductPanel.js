@@ -1,22 +1,11 @@
 import React, { useState, useEffect } from "react";
 import { useFormik } from "formik";
-import {
-  TextField,
-  Select,
-  IconButton,
-  NativeSelect,
-  InputAdornment,
-  Fab,
-  MenuItem,
-  Button,
-  Input,
-  Switch,
-  Typography
-} from "@material-ui/core";
-import { Add, Label, Close } from "@material-ui/icons";
+import { Input, IconButton, Typography } from "@material-ui/core";
+import { Close } from "@material-ui/icons";
 import { css } from "@emotion/core";
 import { useDispatch } from "react-redux";
-import { useTransition, animated, useSpring } from "react-spring";
+import { useSpring } from "react-spring";
+import { Button, ProductPanelStyled } from "../../styles";
 
 export default function ProductPanel({ setProductOpen, style }) {
   const spring = useSpring({
@@ -31,19 +20,21 @@ export default function ProductPanel({ setProductOpen, style }) {
       productName: "",
       description: "",
       price: 0,
-      quantity: 0
+      quantity: 1
     },
     onSubmit: product => {
-      dispatch({ type: "ADD_PRODUCT", payload: product });
+      const quantity = product.quantity > 1 ? product.quantity : 1;
+      dispatch({ type: "ADD_PRODUCT", payload: { ...product, quantity } });
       localStorage.setItem(
         "products",
         JSON.stringify([...localProducts, product])
       );
       setlocalProducts(s => [...s, product]);
-      setProductOpen(s => !s);
+      // setProductOpen(s => !s);
       formik.resetForm();
     }
   });
+
   useEffect(() => {
     const localProducts = JSON.parse(localStorage.getItem("products")) || [];
     if (localProducts) {
@@ -52,25 +43,7 @@ export default function ProductPanel({ setProductOpen, style }) {
     return () => {};
   }, []);
   return (
-    <animated.div
-      style={style}
-      css={css`
-        display: flex;
-        flex-direction: column;
-        width: 100vw;
-        height: 100vh;
-        position: absolute;
-        z-index: 3;
-        background-color: #212120;
-        padding: 1em;
-        .main-actions {
-          color: #f7a705;
-          display: flex;
-          justify-content: space-between;
-          width: 100%;
-        }
-      `}
-    >
+    <ProductPanelStyled style={style}>
       <div className="main-actions">
         <Typography variant="h4">Products</Typography>
         <IconButton
@@ -100,7 +73,6 @@ export default function ProductPanel({ setProductOpen, style }) {
             border-color: black;
           }
           label {
-            margin: 0.2em;
             color: white;
             font-weight: 400;
           }
@@ -129,18 +101,13 @@ export default function ProductPanel({ setProductOpen, style }) {
               transition: border linear 0.3s;
             }
             & .qty {
-              p {
-                margin: 1em;
-              }
               & > div {
                 display: flex;
                 flex-direction: column;
               }
             }
           }
-          [type="submit"] {
-            align-self: flex-start;
-          }
+          transition: all 2s;
         `}
         onSubmit={formik.handleSubmit}
       >
@@ -211,6 +178,7 @@ export default function ProductPanel({ setProductOpen, style }) {
                 onBlur={formik.handleBlur}
                 onChange={formik.handleChange}
                 value={formik.values.quantity}
+                defaultValue={1}
                 required
               />
             </div>
@@ -237,16 +205,11 @@ export default function ProductPanel({ setProductOpen, style }) {
           setIsflat={setIsflat}
           formik={formik}
         />
-        <Button
-          type="submit"
-          variant="contained"
-          style={{ color: "white", marginTop: "0.5em" }}
-          color="primary"
-        >
+        <Button type="submit" variant="contained" align="center">
           Save
         </Button>
       </form>
-    </animated.div>
+    </ProductPanelStyled>
   );
 }
 
@@ -256,6 +219,10 @@ function ProductsInLocal({
   formik,
   setIsflat
 }) {
+  const handleClearLocalStorage = () => {
+    setlocalProducts([]);
+    localStorage.removeItem("products");
+  };
   return (
     localProducts.length > 0 && (
       <div>
@@ -268,12 +235,7 @@ function ProductsInLocal({
           `}
         >
           <p>Recently Used</p>
-          <IconButton
-            onClick={() => {
-              setlocalProducts([]);
-              localStorage.removeItem("products");
-            }}
-          >
+          <IconButton onClick={handleClearLocalStorage}>
             <Close />
           </IconButton>
         </div>
@@ -299,7 +261,7 @@ function ProductsInLocal({
                 }
               `}
               onClick={() => {
-                setIsflat(product.quantity === 1);
+                setIsflat(!product.quantity > 0);
                 formik.setValues({ ...product }, true);
               }}
             >

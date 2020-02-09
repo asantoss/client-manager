@@ -20,7 +20,9 @@ const useStyles = makeStyles(theme => ({
     backgroundColor: theme.palette.background.paper
   },
   appBar: {
-    backgroundColor: "#212120"
+    backgroundColor: "#212120",
+    top: 0,
+    bottom: "auto"
   },
   grow: {
     flexGrow: 1
@@ -46,7 +48,7 @@ function Topbar(props) {
   };
   return (
     <div className={classes.root}>
-      <AppBar position="static" className={classes.appBar}>
+      <AppBar position="fixed" className={classes.appBar}>
         <Toolbar
           css={css`
             justify-content: space-between;

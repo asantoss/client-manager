@@ -1,6 +1,6 @@
-import React from "react";
+import React, { useEffect } from "react";
 import Layout from "./components/Layouts/Layout";
-import { BrowserRouter as Router, Route } from "react-router-dom";
+import { Route, Switch } from "react-router-dom";
 import SignUp from "./components/authentication/SignUp";
 import Clients from "./components/Clients";
 import SignIn from "./components/authentication/SignIn";
@@ -8,11 +8,13 @@ import { ApolloClient } from "apollo-client";
 import { InMemoryCache } from "apollo-cache-inmemory";
 import { HttpLink } from "apollo-link-http";
 import { ApolloProvider } from "@apollo/react-hooks";
-import { Provider } from "react-redux";
-import store from "./store";
+import { useSelector } from "react-redux";
+import { useHistory, useLocation } from "react-router-dom";
 
 import InvoiceCreator from "./pages/InvoiceCreator";
 import TopBar from "./components/Layouts/TopBar";
+import { animated, useTransition } from "react-spring";
+import Modal from "./Modal";
 
 const cache = new InMemoryCache();
 const link = new HttpLink({
@@ -39,46 +41,72 @@ const client = new ApolloClient({
 });
 
 function App() {
+  const { user } = useSelector(state => state);
+  const history = useHistory();
+  const location = useLocation();
+  const transitions = useTransition(location, location => location.pathname, {
+    from: { marginLeft: 1000 },
+    enter: { marginLeft: 0 },
+    leave: { display: "none" }
+  });
+
+  useEffect(() => {
+    if (!user.isLogged) {
+      history.push("/login");
+    }
+  }, []);
   return (
     <div className="App">
       <ApolloProvider client={client}>
-        <Provider store={store}>
-          <Router>
-            <TopBar />
-            <Route
-              path="/clients"
-              render={() => {
-                return (
-                  <Layout>
-                    <Clients />
-                  </Layout>
-                );
-              }}
-            />
-            <Route
-              path="/invoice/creator"
-              render={() => {
-                return (
-                  <Layout>
-                    <InvoiceCreator />
-                  </Layout>
-                );
-              }}
-            />
-            <Route
-              path="/invoices"
-              render={() => {
-                return (
-                  <Layout>
-                    <InvoiceCreator />
-                  </Layout>
-                );
-              }}
-            />
-            <Route path="/register" component={SignUp} />
-            <Route path="/login" exact component={SignIn} />
-          </Router>
-        </Provider>
+        <TopBar />
+        {transitions.map(({ item, props, key }) => {
+          return (
+            <animated.div key={key} style={props}>
+              <Switch location={item}>
+                <Route
+                  exact
+                  path="/clients"
+                  render={() => {
+                    return (
+                      <Layout>
+                        <Clients />
+                      </Layout>
+                    );
+                  }}
+                />
+                <Route
+                  exact
+                  path="/invoice/creator"
+                  render={() => {
+                    return (
+                      <Layout>
+                        <InvoiceCreator />
+                      </Layout>
+                    );
+                  }}
+                />
+                <Route
+                  exact
+                  path="/invoices"
+                  render={() => {
+                    return (
+                      <Layout>
+                        <InvoiceCreator />
+                      </Layout>
+                    );
+                  }}
+                />
+                <Route exact path="/register" component={SignUp} />
+                <Route
+                  path="/login"
+                  render={() => {
+                    return <SignIn />;
+                  }}
+                />
+              </Switch>
+            </animated.div>
+          );
+        })}
       </ApolloProvider>
     </div>
   );

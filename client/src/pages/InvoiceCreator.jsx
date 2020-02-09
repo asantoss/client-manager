@@ -1,18 +1,15 @@
-import React, { useState, useEffect } from "react";
-import { PDFViewer } from "@react-pdf/renderer";
-import InvoiceForm from "../components/Forms/InvoiceForm";
-import InvoicePreview from "../components/InvoicePreview";
+import React, { useState, useEffect, Component } from "react";
 import Modal from "../Modal";
 import { css } from "@emotion/core";
 import ClientInformation from "../components/Forms/ClientInformation";
-import { Grid, Button, Typography, IconButton } from "@material-ui/core";
+import { Grid, Typography, IconButton } from "@material-ui/core";
 import ProductPanel from "../components/Forms/ProductPanel";
 import { useSelector, useDispatch } from "react-redux";
-import { AddCircle, CloseOutlined } from "@material-ui/icons";
-import { useLocation, Link } from "react-router-dom";
-import { useTransition, animated } from "react-spring";
-import { Transition } from "react-spring/renderprops";
-
+import { AddCircle } from "@material-ui/icons";
+import { useLocation } from "react-router-dom";
+import { useTransition } from "react-spring";
+import createDoc from "../components/createPdf";
+import { Button } from "../styles/index";
 export default function InvoiceCreator() {
   const [isProductOpen, setProductOpen] = useState(false);
   const transition = useTransition(isProductOpen, null, {
@@ -100,7 +97,7 @@ export default function InvoiceCreator() {
       <Grid item className="invoice-panel-products">
         <hr />
         <Typography>Products</Typography>
-        <hr />
+        <hr style={{ margin: 0 }} />
         {invoiceData.products &&
           invoiceData.products.map((product, index) => {
             return (
@@ -165,6 +162,7 @@ export default function InvoiceCreator() {
         </IconButton>
       </Grid>
       <Grid item className="invoice-panel">
+        <hr />
         <Typography>Details</Typography>
         <hr />
         <Typography>
@@ -177,8 +175,14 @@ export default function InvoiceCreator() {
           <Button variant="contained" color="primary">
             Save
           </Button>
-          <Button variant="contained" color="primary">
-            <Link>Preview</Link>
+          <Button
+            variant="contained"
+            color="primary"
+            onClick={() => {
+              window.open(createDoc(invoiceData), "_blank");
+            }}
+          >
+            Preview
           </Button>
         </div>
       </Grid>

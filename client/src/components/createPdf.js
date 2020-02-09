@@ -164,5 +164,3 @@ function createRawHtml(data) {
 </html>
   `;
 }
-
-html2canvas();

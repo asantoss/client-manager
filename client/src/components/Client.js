@@ -4,43 +4,23 @@ import {
   ExpansionPanel,
   ExpansionPanelSummary,
   Typography,
-  ExpansionPanelDetails,
-  ExpansionPanelActions,
-  Button
+  ExpansionPanelDetails
 } from "@material-ui/core";
-import { ExpandMore, Delete, PlusOne } from "@material-ui/icons";
+import { ExpandMore } from "@material-ui/icons";
 import { css } from "@emotion/core";
 import { Link } from "react-router-dom";
+import { Button, ClientStyled } from "../styles/index";
 export default function Client({ client, className }) {
   return (
-    <Grid item xs={12} key={client.id} className={className}>
-      <ExpansionPanel>
+    <ClientStyled item className={className}>
+      <ExpansionPanel className="client-panel">
         <ExpansionPanelSummary expandIcon={<ExpandMore />}>
           <Typography variant="h5">
             {client.firstName} {client.lastName}
           </Typography>
         </ExpansionPanelSummary>
         <ExpansionPanelDetails>
-          <Grid
-            container
-            css={css`
-              display: flex;
-              justify-content: space-evenly;
-              flex-direction: column;
-              flex-wrap: 1;
-              & > .client-actions {
-                align-self: flex-start;
-                button {
-                  display: inline-block;
-                  margin: 1em;
-                  color: white;
-                  &.delete-button {
-                    background-color: red;
-                  }
-                }
-              }
-            `}
-          >
+          <Grid container className="client-information">
             <Typography>Phone Number:</Typography>
             <a href={`tel:${client.phoneNumber}`}>{client.phoneNumber}</a>{" "}
             <br />
@@ -72,6 +52,6 @@ export default function Client({ client, className }) {
           </Grid>
         </ExpansionPanelDetails>
       </ExpansionPanel>
-    </Grid>
+    </ClientStyled>
   );
 }

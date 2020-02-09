@@ -12,6 +12,8 @@ import * as Yup from "yup";
 import { css } from "emotion";
 import { useMutation } from "@apollo/react-hooks";
 import { REGISTER } from "../../apollo/constants";
+import { useDispatch } from "react-redux";
+import { useHistory } from "react-router-dom";
 
 const SignUpSchema = Yup.object().shape({
   firstName: Yup.string()
@@ -33,7 +35,8 @@ const SignUpSchema = Yup.object().shape({
 
 export default function SignUp() {
   const [isPasswordShown, setPassShowed] = useState(false);
-
+  const dispatch = useDispatch();
+  const history = useHistory();
   const handleShowPassword = () => {
     setPassShowed(!isPasswordShown);
   };
@@ -41,7 +44,7 @@ export default function SignUp() {
   const handleMouseDownPassword = event => {
     event.preventDefault();
   };
-  const [handleRegister, { loading, data }] = useMutation(REGISTER);
+  const [handleRegister, { loading }] = useMutation(REGISTER);
   const formik = useFormik({
     initialValues: {
       firstName: "",
@@ -58,13 +61,13 @@ export default function SignUp() {
     onSubmit: values => {
       handleRegister({
         variables: { ...values }
+      }).then(() => {
+        dispatch({ type: "LOGIN", payload: { ...values } });
+        history.push("/");
       });
     }
   });
   if (loading) return <p>Loading....</p>;
-  if (data) {
-    alert(JSON.stringify(data, null, 2));
-  }
   return (
     <form
       className={css`
@@ -102,6 +105,7 @@ export default function SignUp() {
             />
           );
         }
+        return;
       })}
       <TextField
         variant="outlined"
