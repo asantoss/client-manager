@@ -45,8 +45,8 @@ function App() {
   const history = useHistory();
   const location = useLocation();
   const transitions = useTransition(location, location => location.pathname, {
-    from: { marginLeft: 1000 },
-    enter: { marginLeft: 0 },
+    from: { opacity: 0 },
+    enter: { opacity: 1 },
     leave: { display: "none" }
   });
 

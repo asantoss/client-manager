@@ -7,7 +7,6 @@ import {
   ExpansionPanelDetails
 } from "@material-ui/core";
 import { ExpandMore } from "@material-ui/icons";
-import { css } from "@emotion/core";
 import { Link } from "react-router-dom";
 import { Button, ClientStyled } from "../styles/index";
 export default function Client({ client, className }) {

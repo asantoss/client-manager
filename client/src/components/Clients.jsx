@@ -15,9 +15,7 @@ export default function Clients() {
         {clients.map(client => {
           return (
             <div key={client.id}>
-              <Divider />
-              <Client className="client-panel" client={client} />
-              <Divider />
+              <Client client={client} />
             </div>
           );
         })}

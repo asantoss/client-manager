@@ -139,12 +139,12 @@ export default function ProductPanel({ setProductOpen, style }) {
                 setIsflat(true);
               }
             }}
-            className={isFlat && "active"}
+            className={isFlat ? "active" : ""}
           >
             Flat Rate
           </Typography>
           <Typography
-            className={!isFlat && "active"}
+            className={!isFlat ? "active" : ""}
             onClick={() => {
               if (isFlat) {
                 setIsflat(false);

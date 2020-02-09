@@ -55,7 +55,7 @@ export default function InvoiceCreator() {
         .product {
           background: rgba(0, 0, 0, 0.8);
           color: white;
-          &:nth-child(even) {
+          &:nth-of-type(even) {
             background: rgba(0, 0, 0, 0.5);
             color: white;
           }
@@ -146,7 +146,7 @@ export default function InvoiceCreator() {
         {transition.map(
           ({ item, key, props }) =>
             item && (
-              <Modal>
+              <Modal key={key}>
                 <ProductPanel style={props} setProductOpen={setProductOpen} />
               </Modal>
             )
