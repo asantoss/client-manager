@@ -3,17 +3,18 @@ import { useFormik } from "formik";
 import {
   TextField,
   InputLabel,
-  Button,
   Typography,
   IconButton,
   InputAdornment
 } from "@material-ui/core";
+
 import { Visibility, VisibilityOff } from "@material-ui/icons";
 import { css } from "emotion";
 import { useLazyQuery } from "@apollo/react-hooks";
 import { LOGIN } from "../../apollo/constants";
 import { Link, useHistory } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
+import { SignInForm, Button } from "../../styles";
 
 export default function SignIn() {
   const { isLoggedIn } = useSelector(s => s.user);
@@ -45,20 +46,7 @@ export default function SignIn() {
     event.preventDefault();
   };
   return (
-    <form
-      className={css`
-        padding: 1.5em;
-        height: 80vh;
-        display: flex;
-        flex-direction: column;
-        justify-content: space-evenly;
-        & > button {
-          align-self: flex-end;
-          width: 100px;
-        }
-      `}
-      onSubmit={formik.handleSubmit}
-    >
+    <SignInForm onSubmit={formik.handleSubmit}>
       <Typography variant="h2">Sign In</Typography>
       <InputLabel />
       <TextField
@@ -91,9 +79,9 @@ export default function SignIn() {
         }}
       />
       <Link to="/register">Don't have an account?</Link>
-      <Button variant="contained" color="primary" type="submit">
+      <Button type="submit" variant="success">
         Submit
       </Button>
-    </form>
+    </SignInForm>
   );
 }

@@ -1,54 +1,170 @@
-import * as jsPDF from "jspdf";
-import * as html2canvas from "html2canvas";
+import pdf from "pdfjs";
+import React from "react";
+import {
+  Page,
+  Text,
+  View,
+  Document,
+  StyleSheet,
+  PDFViewer,
+  PDFDownloadLink
+} from "@react-pdf/renderer";
 
-export default function createDoc(data) {
-  const { client, products, company } = data;
-  var doc = new jsPDF();
-  const date = new Date();
-  function getFormattedDate(date) {
-    let year = date.getFullYear();
-    let month = (1 + date.getMonth()).toString().padStart(2, "0");
-    let day = date
-      .getDate()
-      .toString()
-      .padStart(2, "0");
+import { DocStyled, MainActions } from "../styles";
+import styled from "styled-components";
 
-    return month + "/" + day + "/" + year;
-  }
+function getFormattedDate(date) {
+  let year = date.getFullYear();
+  let month = (1 + date.getMonth()).toString().padStart(2, "0");
+  let day = date
+    .getDate()
+    .toString()
+    .padStart(2, "0");
 
-  // *** Headings
-  doc.setFontStyle("bold");
-  doc.setFontSize(20);
-  doc.text(`${company.companyName}`, 10, 20);
-  doc.text(`Bill To`, 15, 70);
-  doc.text(`Date`, 120, 85);
-  doc.text(`Qty`, 15, 170);
-  doc.text(`Description`, 45, 170);
-  doc.text(`Unit Price`, 120, 170);
-  doc.text(`Description`, 45, 170);
-  doc.text(`Amount`, 170, 170);
-  doc.setFontSize(24);
-  doc.text("Invoice Total", 15, 135);
-  doc.text("$1,350", 170, 135);
-
-  // *** Layout
-  doc.line(15, 120, 200, 120);
-  doc.line(15, 150, 200, 150);
-
-  // *** Data
-  doc.setFontSize(14);
-  doc.setFontStyle("");
-  // *** Company Info
-  doc.text(`${company.address}`, 15, 30);
-  doc.text(`${company.city}, ${company.state}`, 15, 35);
-  // *** Client Info
-  doc.text(`${client.firstName} ${client.lastName}`, 15, 85);
-  doc.text(`${client.address}`, 15, 90);
-  doc.text(`${client.city}, ${client.state}`, 15, 95);
-  doc.text(getFormattedDate(date), 170, 85);
-
-  return doc.output("bloburl");
+  return month + "/" + day + "/" + year;
 }
+
+const styles = StyleSheet.create({
+  page: {
+    flexDirection: "column",
+    backgroundColor: "#E4E4E4",
+    justifyContent: "space-evenly",
+    padding: 20
+  },
+  section: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    padding: 10,
+    flexGrow: 1
+  },
+  innerSection: {
+    flexDirection: "column"
+  },
+  h2: {
+    fontSize: 24,
+    fontWeight: "bold",
+    margin: 0
+  },
+  span: {
+    color: "#666",
+    fontSize: 11
+  },
+  table: {
+    display: "table",
+    width: "auto",
+    margin: 20,
+    borderWidth: 1,
+    borderRightWidth: 1,
+    borderBottomWidth: 1,
+    borderStyle: "dotted",
+    borderColor: "grey",
+    flexDirection: "column",
+    flexShrink: 1
+  },
+
+  tableRow: {
+    width: "100%",
+    border: 3,
+    // alignItems: 'justify',
+    margin: "auto",
+    flexDirection: "row"
+    // flexGrow: 1,
+    // flexAlign: 'strech'
+  },
+  tableColHeader: {
+    borderBottomColor: "#000",
+    borderWidth: 1,
+    borderLeftWidth: 0,
+    borderTopWidth: 0,
+    width: "17%"
+  },
+  tableCellHeader: {
+    margin: 5,
+    fontSize: 12,
+    fontWeight: 500,
+    textAlign: "center"
+  },
+  tableCol: {
+    flexGrow: 1,
+    borderWidth: 1,
+    borderLeftWidth: 0,
+    borderTopWidth: 0
+  },
+  tableCell: {
+    margin: 5,
+    fontSize: 10
+  }
+});
+
+export const MyDocument = ({ invoiceData, setIsViewerOpen, style }) => {
+  const { company, products, client } = invoiceData;
+  const createDoc = (
+    <Document>
+      <Page size="A4" style={styles.page}>
+        <View style={styles.section}>
+          <View style={styles.innerSection}>
+            <Text style={styles.h2}>
+              {company.companyName || "Company Name"}
+            </Text>
+            <Text style={styles.span}>{company.email || "Company Email"}</Text>
+            <Text style={styles.span}>
+              {company.phoneNumber || "555-555-5555"}
+            </Text>
+          </View>
+          <View style={styles.innerSection}>
+            <Text style={styles.h2}>Quote</Text>
+            <Text style={styles.span}>{getFormattedDate(new Date())}</Text>
+          </View>
+        </View>
+        <View style={styles.section}>
+          <View style={styles.innerSection}>
+            <Text style={styles.h2}>
+              {client.firstName + " " + client.lastName || "Client Name"}
+            </Text>
+            <Text style={styles.span}>
+              {client.phoneNumber || "555-555-5555"}
+            </Text>
+          </View>
+        </View>
+        <View style={styles.section}>
+          <View style={styles.innerSection}>
+            <View style={styles.table} wrap>
+              <View style={styles.tableRow}>
+                <View style={styles.tableColHeader}>
+                  <Text style={styles.tableCell}>Name</Text>
+                </View>
+                <View style={styles.tableColHeader}>
+                  <Text style={styles.tableCell}>Qty.</Text>
+                </View>
+                <View style={styles.tableColHeader}>
+                  <Text style={styles.tableCell}>Price</Text>
+                </View>
+                {/* <View style={styles.tableColHeader}>
+                  <Text style={styles.tableCell}>Sub-Total</Text>
+                </View> */}
+              </View>
+            </View>
+          </View>
+        </View>
+      </Page>
+    </Document>
+  );
+
+  return (
+    <DocStyled style={style}>
+      <MainActions
+        pageName="Document Viewer"
+        closeFunction={() => setIsViewerOpen(false)}
+      />{" "}
+      <PDFViewer className="viewer">{createDoc}</PDFViewer>
+      <PDFDownloadLink document={createDoc} fileName="somename.pdf">
+        {({ blob, url, loading, error }) =>
+          loading ? "Loading document..." : "Download now!"
+        }
+      </PDFDownloadLink>
+    </DocStyled>
+  );
+};
 
 function createRawHtml(data) {
   const { client, products, company } = data;

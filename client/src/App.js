@@ -10,12 +10,12 @@ import { HttpLink } from "apollo-link-http";
 import { ApolloProvider } from "@apollo/react-hooks";
 import { useSelector } from "react-redux";
 import { useHistory, useLocation } from "react-router-dom";
-
+import { ThemeProvider } from "styled-components";
 import InvoiceCreator from "./pages/InvoiceCreator";
 import TopBar from "./components/Layouts/TopBar";
 import { animated, useTransition } from "react-spring";
-import Modal from "./Modal";
-
+import theme from "./styles/theme";
+import { AppStyled, GlobalStyle } from "./styles";
 const cache = new InMemoryCache();
 const link = new HttpLink({
   uri: "/graphql",
@@ -52,11 +52,12 @@ function App() {
 
   useEffect(() => {
     if (!user.isLogged) {
-      history.push("/login");
+      // history.push("/login");
     }
   }, []);
   return (
-    <div className="App">
+    <ThemeProvider theme={theme}>
+      <GlobalStyle />
       <ApolloProvider client={client}>
         <TopBar />
         {transitions.map(({ item, props, key }) => {
@@ -108,7 +109,7 @@ function App() {
           );
         })}
       </ApolloProvider>
-    </div>
+    </ThemeProvider>
   );
 }
 

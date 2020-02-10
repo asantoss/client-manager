@@ -5,7 +5,7 @@ import { Close } from "@material-ui/icons";
 import { css } from "@emotion/core";
 import { useDispatch } from "react-redux";
 import { useSpring } from "react-spring";
-import { Button, ProductPanelStyled } from "../../styles";
+import { Button, ProductPanelStyled, MainActions } from "../../styles";
 
 export default function ProductPanel({ setProductOpen, style }) {
   const spring = useSpring({
@@ -44,17 +44,10 @@ export default function ProductPanel({ setProductOpen, style }) {
   }, []);
   return (
     <ProductPanelStyled style={style}>
-      <div className="main-actions">
-        <Typography variant="h4">Products</Typography>
-        <IconButton
-          color="inherit"
-          onClick={() => {
-            setProductOpen(s => !s);
-          }}
-        >
-          <Close />
-        </IconButton>
-      </div>
+      <MainActions
+        pageName="Products"
+        closeFunction={() => setProductOpen(false)}
+      />
       <form
         css={css`
           display: flex;
@@ -205,7 +198,7 @@ export default function ProductPanel({ setProductOpen, style }) {
           setIsflat={setIsflat}
           formik={formik}
         />
-        <Button type="submit" variant="contained" align="center">
+        <Button type="submit" variant="success" align="center">
           Save
         </Button>
       </form>

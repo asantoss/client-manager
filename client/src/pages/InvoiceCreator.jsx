@@ -8,19 +8,33 @@ import { useSelector, useDispatch } from "react-redux";
 import { AddCircle } from "@material-ui/icons";
 import { useLocation } from "react-router-dom";
 import { useTransition } from "react-spring";
-import createDoc from "../components/createPdf";
+import { MyDocument } from "../components/createPdf";
 import { Button } from "../styles/index";
+import { PDFViewer } from "@react-pdf/renderer";
 export default function InvoiceCreator() {
   const [isProductOpen, setProductOpen] = useState(false);
-  const transition = useTransition(isProductOpen, null, {
-    from: { opacity: 0, marginTop: 1000 },
+  const [isViewer, setisViewerOpen] = useState(false);
+  const productTransition = useTransition(isProductOpen, null, {
+    from: { opacity: 0, marginTop: 200 },
     enter: { opacity: 1, marginTop: 0 },
-    leave: { opacity: 0, marginTop: 1000 }
+    leave: { opacity: 0, marginTop: 200 },
+    config: { duration: 500 }
+  });
+  const viewerTransition = useTransition(isViewer, null, {
+    from: { opacity: 0, marginTop: 200 },
+    enter: { opacity: 1, marginTop: 0 },
+    leave: { opacity: 0, marginTop: 200 },
+    config: { duration: 500 }
   });
   const [isClientOpen, setClientOpen] = useState(false);
   const invoiceData = useSelector(state => state.invoice);
   const { state } = useLocation();
   const dispatch = useDispatch();
+  const handleShowViewer = () => {
+    if (!isProductOpen) {
+      setisViewerOpen(!isViewer);
+    }
+  };
   useEffect(() => {
     if (state) {
       dispatch({ type: "SET_CLIENT", payload: { ...state } });
@@ -143,14 +157,30 @@ export default function InvoiceCreator() {
             );
           })}
 
-        {transition.map(
-          ({ item, key, props }) =>
-            item && (
+        {productTransition.map(({ item, key, props }) => {
+          if (item) {
+            return (
               <Modal key={key}>
                 <ProductPanel style={props} setProductOpen={setProductOpen} />
               </Modal>
+            );
+          }
+        })}
+
+        {viewerTransition.map(({ item, key, props }) => {
+          return (
+            item &&
+            !isProductOpen && (
+              <Modal key={key}>
+                <MyDocument
+                  style={props}
+                  setIsViewerOpen={setisViewerOpen}
+                  invoiceData={invoiceData}
+                />
+              </Modal>
             )
-        )}
+          );
+        })}
         <IconButton
           className="panel-actions"
           onClick={() => {
@@ -172,18 +202,8 @@ export default function InvoiceCreator() {
           Total: {(totalCost + tax).toLocaleString("en-us", "currency")} $
         </Typography>
         <div className="invoice-actions">
-          <Button variant="contained" color="primary">
-            Save
-          </Button>
-          <Button
-            variant="contained"
-            color="primary"
-            onClick={() => {
-              window.open(createDoc(invoiceData), "_blank");
-            }}
-          >
-            Preview
-          </Button>
+          <Button variant="success">Save</Button>
+          <Button onClick={handleShowViewer}>Preview</Button>
         </div>
       </Grid>
     </Grid>

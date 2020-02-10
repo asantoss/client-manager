@@ -36,17 +36,9 @@ export default function Client({ client, className }) {
                   state: { ...client }
                 }}
               >
-                <Button variant="contained" color="primary">
-                  Quote
-                </Button>
+                <Button>Quote</Button>
               </Link>
-              <Button
-                variant="contained"
-                color="inherit"
-                className="delete-button"
-              >
-                Delete
-              </Button>
+              <Button variant="danger">Delete</Button>
             </Grid>
           </Grid>
         </ExpansionPanelDetails>
