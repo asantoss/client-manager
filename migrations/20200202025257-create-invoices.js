@@ -9,7 +9,7 @@ module.exports = {
         type: Sequelize.INTEGER
       },
       dateDue: {
-        type: Sequelize.DATE
+        type: Sequelize.STRING
       },
       products: {
         type: Sequelize.JSON,

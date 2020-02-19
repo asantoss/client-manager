@@ -3,7 +3,7 @@ module.exports = (sequelize, DataTypes) => {
   const Invoices = sequelize.define(
     "Invoices",
     {
-      dateDue: DataTypes.DATE,
+      dateDue: DataTypes.STRING,
       products: DataTypes.JSON,
       total: DataTypes.INTEGER,
       isPaid: DataTypes.BOOLEAN

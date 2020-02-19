@@ -28,10 +28,23 @@ const typeDefs = gql`
   }
   type Invoice {
     id: ID!
-    dueDate: String
-    products: [String]
+    dateDue: String
+    products: [Product]
     client: Client
     total: Int
+    isPaid: Boolean
+  }
+  type Product {
+    productName: String
+    description: String
+    quantity: String
+    price: Int
+  }
+  input ProductsInput {
+    productName: String
+    description: String
+    quantity: Int
+    price: Int
   }
   type Query {
     getUser(id: ID!): User
@@ -41,6 +54,13 @@ const typeDefs = gql`
     login(email: String!, password: String!): User
   }
   type Mutation {
+    createInvoice(
+      ClientId: Int
+      products: [ProductsInput]
+      isPaid: Boolean
+      total: Int
+      dateDue: String
+    ): Invoice
     register(
       firstName: String
       lastName: String
@@ -60,7 +80,6 @@ const typeDefs = gql`
       city: String
       zipCode: String
     ): Client
-    createInvoice(dueDate: String, products: String): Invoice
     updateUser(
       id: Int!
       firstName: String

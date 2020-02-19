@@ -55,6 +55,12 @@ const resolvers = {
       return await models.Client.create({
         ...args
       });
+    },
+    createInvoice: async (_, args, { req }) => {
+      console.log(args);
+      return await models.Invoices.create({
+        ...args
+      });
     }
   },
   User: {
