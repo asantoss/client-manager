@@ -9,7 +9,7 @@ const db = require("./models");
 const jwt = require("jsonwebtoken");
 const createTokens = require("./helpers/auth");
 const cors = require("cors");
-
+const bodyParser = require("body-parser");
 const PORT = process.env.PORT;
 
 async function startServer() {
@@ -23,6 +23,7 @@ async function startServer() {
     })
   });
   const app = express();
+  app.use(bodyParser.json());
   app.use(
     cors({
       origin: "*",
