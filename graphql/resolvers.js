@@ -41,13 +41,11 @@ const resolvers = {
     }
   },
   Mutation: {
-    register: async (_, { firstName, lastName, email, password }, { req }) => {
-      const hashedPassword = await bcrypt.hash(password, saltRounds);
-      email = email.toLowerCase();
+    register: async (_, args, { req }) => {
+      const hashedPassword = await bcrypt.hash(args.password, saltRounds);
+      args.email = args.email.toLowerCase();
       return await models.User.create({
-        firstName,
-        lastName,
-        email,
+        ...args,
         password: hashedPassword
       });
     },
@@ -57,10 +55,27 @@ const resolvers = {
       });
     },
     createInvoice: async (_, args, { req }) => {
-      console.log(args);
       return await models.Invoices.create({
         ...args
       });
+    },
+    updateInvoice: async (_, args, { req }) => {
+      const { id } = args;
+      const invoice = await models.Invoices.findByPk(id);
+      if (invoice) {
+        return await invoice.update({
+          ...args
+        });
+      } else {
+        return "Invoice not found.";
+      }
+    },
+    removeInvoice: async (_, { id }, { req }) => {
+      const model = await models.Invoices.findOne({ where: { id } });
+      if (model) {
+        model.destroy();
+        return "Sucess";
+      }
     }
   },
   User: {
@@ -79,6 +94,10 @@ const resolvers = {
   Invoice: {
     client: async Invoice => {
       return await Invoice.getClient();
+    },
+    user: async Invoice => {
+      const invoiceClient = await Invoice.getClient();
+      return await invoiceClient.getUser();
     }
   }
 };
