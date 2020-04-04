@@ -12,6 +12,12 @@ const cors = require("cors");
 const bodyParser = require("body-parser");
 const PORT = process.env.PORT;
 
+let origin = `localhost:${PORT}`;
+
+if (process.env.NODE_ENV !== "development") {
+  origin = process.env.CLIENT_ORIGIN;
+}
+
 async function startServer() {
   // *** Apollo middleware setup
   const server = new ApolloServer({
@@ -25,7 +31,7 @@ async function startServer() {
   const app = express();
   app.use(
     cors({
-      origin: [process.env.CLIENT_ORIGIN, "localhost:3000"],
+      origin: origin,
       credentials: true,
     })
   );
