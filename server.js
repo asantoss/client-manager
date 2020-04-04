@@ -25,7 +25,7 @@ async function startServer() {
   const app = express();
   app.use(
     cors({
-      origin: ["https://client-man.netlify.com"],
+      origin: [process.env.CLIENT_ORIGIN, "localhost:3000"],
       credentials: true,
     })
   );
