@@ -92,6 +92,7 @@ const typeDefs = gql`
       address: String
       city: String
       zipCode: String
+      UserId: Int!
     ): Client
     updateUser(
       id: Int!
