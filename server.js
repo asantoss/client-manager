@@ -74,6 +74,7 @@ async function startServer() {
 
   server.applyMiddleware({
     app,
+    cors: false,
   });
   // *** Routes
   app.get("/api/faker/users", (req, res) => {
