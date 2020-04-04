@@ -23,17 +23,16 @@ async function startServer() {
     }),
   });
   const app = express();
-  app.use(bodyParser.json());
   app.use(
     cors({
       origin: "https://client-man.netlify.com",
       credentials: true,
     })
   );
+  app.use(bodyParser.json());
   app.use(cookieParser());
 
   app.use(async (req, res, next) => {
-    res.header("Access-Control-Allow-Origin", req.headers.origin);
     const accessToken = req.cookies["access-token"];
     const refreshToken = req.cookies["refresh-token"];
     // *** Check if we got any of the tokens */
