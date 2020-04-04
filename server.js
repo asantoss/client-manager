@@ -26,7 +26,7 @@ async function startServer() {
   app.use(bodyParser.json());
   app.use(
     cors({
-      origin: "https://client-man.netlify.com/",
+      origin: "https://client-man.netlify.com",
       credentials: true,
     })
   );
