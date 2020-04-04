@@ -19,15 +19,14 @@ async function startServer() {
     resolvers,
     context: ({ req, res }) => ({
       req,
-      res
-    })
+      res,
+    }),
   });
   const app = express();
   app.use(bodyParser.json());
   app.use(
     cors({
-      origin: "*",
-      credentials: true
+      credentials: true,
     })
   );
   app.use(cookieParser());
@@ -64,26 +63,26 @@ async function startServer() {
     // *** If we made it here the refreshToken is valid && we will reAuthenticate for another week.
     const tokens = createTokens(user);
     res.cookie("refresh-token", tokens.refreshToken, {
-      maxAge: 1000 * 60 * 60 * 24 * 7
+      maxAge: 1000 * 60 * 60 * 24 * 7,
     });
     res.cookie("access-token", tokens.accessToken, {
-      maxAge: 1000 * 60 * 15
+      maxAge: 1000 * 60 * 15,
     });
     return next();
   });
 
   server.applyMiddleware({
-    app
+    app,
   });
   // *** Routes
   app.get("/api/faker/users", (req, res) => {
-    mockData.createUsers().then(users => {
+    mockData.createUsers().then((users) => {
       res.json(users);
     });
   });
 
   app.get("/api/faker/clients", (req, res) => {
-    mockData.createClients().then(clients => {
+    mockData.createClients().then((clients) => {
       res.json(clients);
     });
   });
