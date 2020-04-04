@@ -9,6 +9,7 @@ To get the this server running locally:
   PG_USER=####
   PG_PASS=####
   PORT=####
+  CLIENT_ORIGIN=####
   ```
 - `npx sequelize-cli db:migrate` to run all the required migrations
 - `npm run dev` to start the local server
