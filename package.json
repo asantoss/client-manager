@@ -18,7 +18,7 @@
     "apollo-client": "^2.6.8",
     "apollo-link-http": "^1.5.16",
     "apollo-server-express": "^2.9.16",
-    "bcrypt": "^3.0.7",
+    "bcrypt": "^5.0.0",
     "body-parser": "^1.19.0",
     "cookie-parser": "^1.4.4",
     "cookieparser": "^0.1.0",
